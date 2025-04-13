@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/design_systems/theme/app_colors.dart';
+import '../../../../../core/navigation/routers.dart';
 import '../bloc/splash_bloc.dart';
 
 class SplashProvider extends StatelessWidget {
@@ -26,18 +28,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Timer(Duration(seconds: 2), () {
-    //   AppRouter.router.navigateTo(context, "/onboarding", replace: true);
-    // });
+    Timer(Duration(seconds: 2), () {
+      AppRouter.router.navigateTo(context, "/wellcome", replace: true);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.purplePurple600,
+      backgroundColor: AppColors.primaryBlue,
       body: Center(
-          // child: Image(image: AssetImage("assets/images/Logo.png"))
-          ),
+        child: Image(
+          image: AssetImage("assets/images/logo.png"),
+        ),
+      ),
     );
   }
 }
