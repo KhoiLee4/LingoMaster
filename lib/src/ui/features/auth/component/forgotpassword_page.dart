@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/navigation/routers.dart';
+
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -30,7 +32,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 28),
           onPressed: () {
-            Navigator.of(context).pop();
+            AppRouter.router.navigateTo(context, "/signin", replace: true);
           },
         ),
         title: const Text(''), // Empty title
@@ -81,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _sendResetLink,
+                onPressed: (){AppRouter.router.navigateTo(context, "/verification", replace: true);},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFEBEDF0),
                   foregroundColor: Colors.black54,

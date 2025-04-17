@@ -1,5 +1,8 @@
 import 'package:fluro/fluro.dart';
 import '../../src/ui/features/auth/auth_router.dart';
+import '../../src/ui/features/class/class_router.dart';
+import '../../src/ui/features/course/course_router.dart';
+import '../../src/ui/features/folder/folder_router.dart';
 import '../../src/ui/features/home/home_router.dart';
 import '../../src/ui/features/library/library_router.dart';
 import '../../src/ui/features/profile/profile_router.dart';
@@ -22,6 +25,9 @@ class AppRouter {
     AuthRouter.defineRoutes(router);
     HomeRouter.defineRoutes(router);
     LibraryRouter.defineRoutes(router);
+    ClassRouter.defineRoutes(router);
+    FolderRouter.defineRoutes(router);
+    CourseRouter.defineRoutes(router);
     ProfileRouter.defineRoutes(router);
     SettingRouter.defineRoutes(router);
   }

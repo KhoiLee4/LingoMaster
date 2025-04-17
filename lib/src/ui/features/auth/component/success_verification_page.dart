@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../../../core/navigation/routers.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
   const EmailVerificationScreen({super.key});
@@ -39,7 +39,7 @@ class EmailVerificationScreen extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               'Nhấp vào liên kết trong email. Hãy kiểm tra hộp thư rác '
-                  'nếu bạn không thấy email trong hộp thư đến của mình.',
+              'nếu bạn không thấy email trong hộp thư đến của mình.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
@@ -48,8 +48,8 @@ class EmailVerificationScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate back to login screen
-                  Navigator.pop(context);
+                  AppRouter.router
+                      .navigateTo(context, "/signin", replace: true);
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),

@@ -16,7 +16,7 @@ class AuthRouter {
   );
 
   static final Handler _signupHandler = Handler(
-    handlerFunc: (context, parameters) => RegisterScreen(),
+    handlerFunc: (context, parameters) => SignupProvider(),
   );
 
   static final Handler _forgotHandler = Handler(

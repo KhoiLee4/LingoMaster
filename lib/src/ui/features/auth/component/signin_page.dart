@@ -99,7 +99,10 @@ class _SigninScreenState extends State<SigninScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    AppRouter.router
+                        .navigateTo(context, "/home", replace: true);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFD9DEE8),
                     shape: RoundedRectangleBorder(

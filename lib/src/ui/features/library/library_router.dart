@@ -35,32 +35,32 @@ class LibraryRouter {
 
   static void defineRoutes(FluroRouter router) {
     router.define(
-      "/course",
+      "/library/course",
       handler: _courseHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/folder",
+      "/library/folder",
       handler: _folderHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/class",
+      "/library/class",
       handler: _classHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/newclass",
+      "/library/newclass",
       handler: _newclassHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/newfolder",
+      "/library/newfolder",
       handler: _newfolderHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/newcourse",
+      "/library/newcourse",
       handler: _newcourseHandler,
       transitionType: TransitionType.inFromRight,
     );

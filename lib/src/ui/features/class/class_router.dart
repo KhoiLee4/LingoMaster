@@ -1,15 +1,15 @@
 import 'package:fluro/fluro.dart';
-import 'component/achievements_page.dart';
-import 'component/proflie_page.dart';
 
-class ProfileRouter {
-  static final Handler _profileHandler = Handler(
-    handlerFunc: (context, parameters) => ProfileScreen(),
+import '../library/component/class_page.dart';
+
+class ClassRouter {
+  static final Handler _mainclassHandler = Handler(
+    handlerFunc: (context, parameters) => ClassScreen(),
   );
 
-  static final Handler _achievementsHandler = Handler(
-    handlerFunc: (context, parameters) => AchievementsScreen(),
-  );
+  // static final Handler _achievementsHandler = Handler(
+  //   handlerFunc: (context, parameters) => AchievementsScreen(),
+  // );
   //
   // static final Handler _signupHandler = Handler(
   //   handlerFunc: (context, parameters) => RegisterScreen(),
@@ -25,15 +25,15 @@ class ProfileRouter {
 
   static void defineRoutes(FluroRouter router) {
     router.define(
-      "/profile",
-      handler: _profileHandler,
+      "/classpage",
+      handler: _mainclassHandler,
       transitionType: TransitionType.inFromRight,
     );
-    router.define(
-      "/achievements",
-      handler: _achievementsHandler,
-      transitionType: TransitionType.inFromRight,
-    );
+    // router.define(
+    //   "/achievements",
+    //   handler: _achievementsHandler,
+    //   transitionType: TransitionType.inFromRight,
+    // );
     // router.define(
     //   "/signup",
     //   handler: _signupHandler,
