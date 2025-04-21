@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
 
   // PRIMARY COLORS
-  static const primaryBlue = Color(0xFF4051F6); // Quizlet Violet-Blue
+  static const primaryBlue = Color(0xFF4153FD); // Quizlet Violet-Blue
   static const primaryCyan = Color(0xFF3CCFCF); // Medium Turquoise
   static const primaryWhite = Color(0xFFFFFFFF); // Anti-Flash White
   static const primaryBlack = Color(0xFF000000);
@@ -23,10 +23,21 @@ class AppColors {
   static const neutralGray900 = Color(0xFF212121);
 
   // ACCENT COLORS
-  static const accentYellow = Color(0xFFFFDC62); // Dùng cho các điểm nhấn
+  static const accentYellow = Color(0xFFFDCB20); // Dùng cho các điểm nhấn
   static const accentGreen = Color(0xFF19EC75); // Dùng cho trạng thái thành công
-  static const accentRed = Color(0xFFF23232); // Dùng cho trạng thái lỗi
+  static const accentRed = Color(0xFFAF0520); // Dùng cho trạng thái lỗi
+
+  // CARD
+  static const backgroundGreen = Color(0xFFE6F9F3); // Dùng cho trạng thái thành công
+  static const textGreen = Color(0xFF1FAB77); // Dùng cho trạng thái thành công
+  static const borderGreen = Color(0xFFA5EED6); // Dùng cho trạng thái thành công
+  static const backgroundRed = Color(0xFFFCF3EE); // Dùng cho trạng thái thành công
+  static const textRed = Color(0xFFCA4B0D); // Dùng cho trạng thái thành công
+  static const borderRed = Color(0xFFF6D6C0); // Dùng cho trạng thái thành công
+
+
 
   // BACKGROUND DEFAULT
-  static const backgroundDefault = Color(0xFFF0F0F0);//0xFFF6F7FB
+  static const backgroundDefault = Color(0xFFF6F7FB);//0xFFF6F7FB
+  static const backgroundLabel = Color(0xFFEDECFA);//0xFFF6F7FB
 }
