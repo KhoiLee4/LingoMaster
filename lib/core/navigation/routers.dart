@@ -1,5 +1,4 @@
 import 'package:fluro/fluro.dart';
-import 'package:lingo_master/src/ui/features/memory_card/memory_card_router.dart';
 import '../../src/ui/features/auth/auth_router.dart';
 import '../../src/ui/features/class/class_router.dart';
 import '../../src/ui/features/course/course_router.dart';
@@ -31,6 +30,5 @@ class AppRouter {
     CourseRouter.defineRoutes(router);
     ProfileRouter.defineRoutes(router);
     SettingRouter.defineRoutes(router);
-    MemoryCardRouter.defineRoutes(router);
   }
 }

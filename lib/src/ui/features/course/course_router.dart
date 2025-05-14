@@ -1,9 +1,21 @@
 import 'package:fluro/fluro.dart';
+import 'package:lingo_master/src/ui/features/course/component/study/study_page.dart';
+import 'package:lingo_master/src/ui/features/course/component/study/study_setting.dart';
 import 'component/course_page.dart';
+import 'component/memory_card/memory_card_page.dart';
 
 class CourseRouter {
   static final Handler _maincourseHandler = Handler(
     handlerFunc: (context, parameters) => CourseScreen(),
+  );
+  static final Handler _memoryCardHandler = Handler(
+    handlerFunc: (context, parameters) => MemoryCardScreen(),
+  );
+  static final Handler _studyHandler = Handler(
+    handlerFunc: (context, parameters) => StudyScreen(),
+  );
+  static final Handler _studySettingHandler = Handler(
+    handlerFunc: (context, parameters) => StudySetting(),
   );
 
   // static final Handler _achievementsHandler = Handler(
@@ -26,6 +38,21 @@ class CourseRouter {
     router.define(
       "/coursepage",
       handler: _maincourseHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+      router.define(
+        "/memoryCard",
+        handler: _memoryCardHandler,
+        transitionType: TransitionType.inFromRight,
+      );
+    router.define(
+      "/study",
+      handler: _studyHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/studySetting",
+      handler: _studySettingHandler,
       transitionType: TransitionType.inFromRight,
     );
     // router.define(
