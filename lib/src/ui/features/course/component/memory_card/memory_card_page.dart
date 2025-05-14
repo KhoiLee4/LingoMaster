@@ -1,5 +1,8 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+
+import '../../../../../../core/navigation/routers.dart';
 
 class MemoryCardScreen extends StatefulWidget {
   const MemoryCardScreen({super.key});
@@ -79,6 +82,7 @@ class _MemoryCardScreenState extends State<MemoryCardScreen>
                             color: AppColors.neutralGray600, size: 30),
                         onPressed: () {
                           // Handle close button press
+                          AppRouter.router.navigateTo(context, "/coursepage", replace: true);
                         },
                       ),
                       Text(

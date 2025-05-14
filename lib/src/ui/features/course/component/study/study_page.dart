@@ -63,7 +63,7 @@ class _StudyPageState extends State<StudyScreen> {
       // Auto proceed to next question after a delay
       if (currentQuestionIndex < questions.length - 1) {
         Future.delayed(Duration(seconds: 2), () {
-          if (mounted) {
+          if (mounted && isAnswerCorrect) {
             _proceedToNextQuestion();
           }
         });
@@ -105,6 +105,7 @@ class _StudyPageState extends State<StudyScreen> {
                     GestureDetector(
                       onTap: () {
                         // Handle back button press
+                        AppRouter.router.navigateTo(context, "/coursepage", replace: true);
                       },
                       child: Icon(Icons.close, size: 32, color: Colors.grey[600]),
                     ),
