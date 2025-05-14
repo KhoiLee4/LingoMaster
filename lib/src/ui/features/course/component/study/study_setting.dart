@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 
+import '../../../../../../core/navigation/routers.dart';
+
 class StudySetting extends StatefulWidget {
   const StudySetting({super.key});
 
@@ -27,7 +29,9 @@ class _StudySettingState extends State<StudySetting> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            AppRouter.router.navigateTo(context, "/study", replace: true);
+          }
         ),
         title: const Text(
           'Tùy chọn',

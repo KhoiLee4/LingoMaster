@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+
+import '../../../../../core/navigation/routers.dart';
 
 class CourseScreen extends StatefulWidget {
   const CourseScreen({super.key});
@@ -242,17 +245,17 @@ class _CourseScreenState extends State<CourseScreen> {
                 ),
                 // Action Buttons
                 buildActionButton("assets/images/course/Card.png",
-                    "Thẻ ghi nhớ", Colors.blue),
+                    "Thẻ ghi nhớ", Colors.blue, "/memoryCard"),
                 buildActionButton(
-                    "assets/images/course/study.png", "Học", Colors.blue),
+                    "assets/images/course/study.png", "Học", Colors.blue, "/study"),
                 buildActionButton(
-                    "assets/images/course/Test.png", "Kiểm tra", Colors.blue),
+                    "assets/images/course/Test.png", "Kiểm tra", Colors.blue, "/testSetting"),
                 buildActionButton("assets/images/course/graft_card.png",
-                    "Ghép thẻ", Colors.blue),
+                    "Ghép thẻ", Colors.blue, ""),
                 buildActionButton(
-                    "assets/images/course/blast.png", "Blast", Colors.blue),
+                    "assets/images/course/blast.png", "Blast", Colors.blue, ""),
                 buildActionButton(
-                    "assets/images/course/block.png", "Khối hộp", Colors.blue),
+                    "assets/images/course/block.png", "Khối hộp", Colors.blue, ""),
 
                 SizedBox(
                   height: 12,
@@ -500,7 +503,7 @@ class _CourseScreenState extends State<CourseScreen> {
     );
   }
 
-  Widget buildActionButton(String image, String text, Color color) {
+  Widget buildActionButton(String image, String text, Color color, String link) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       height: 60,
@@ -516,6 +519,9 @@ class _CourseScreenState extends State<CourseScreen> {
         ],
       ),
       child: ListTile(
+        onTap: () {
+          AppRouter.router.navigateTo(context, link, replace: true);
+        },
         leading: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
