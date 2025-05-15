@@ -251,7 +251,7 @@ class _CourseScreenState extends State<CourseScreen> {
                 buildActionButton(
                     "assets/images/course/Test.png", "Kiểm tra", Colors.blue, "/testSetting"),
                 buildActionButton("assets/images/course/graft_card.png",
-                    "Ghép thẻ", Colors.blue, ""),
+                    "Ghép thẻ", Colors.blue, "/matchingCardReady"),
                 buildActionButton(
                     "assets/images/course/blast.png", "Blast", Colors.blue, ""),
                 buildActionButton(
