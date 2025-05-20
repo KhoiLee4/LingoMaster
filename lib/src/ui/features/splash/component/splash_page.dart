@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(Duration(seconds: 2), () {
       AppRouter.router.navigateTo(context, "/wellcome", replace: true);
-      // AppRouter.router.navigateTo(context, "/folderpage", replace: true);
+      // AppRouter.router.navigateTo(context, "/coursepage", replace: true);
     });
   }
 
