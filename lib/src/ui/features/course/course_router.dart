@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart';
-import '../library/component/course_page.dart';
+import 'component/course_page.dart';
 
 class CourseRouter {
   static final Handler _maincourseHandler = Handler(

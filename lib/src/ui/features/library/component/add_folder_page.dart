@@ -1,86 +1,133 @@
 import 'package:flutter/material.dart';
 
-class NewFolderScreen extends StatefulWidget {
-  const NewFolderScreen({super.key});
-
+class AddThuMucScreen extends StatefulWidget {
   @override
-  State<NewFolderScreen> createState() => _NewFolderScreenState();
+  _AddThuMucScreenState createState() => _AddThuMucScreenState();
 }
 
-class _NewFolderScreenState extends State<NewFolderScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _folderNameController = TextEditingController();
-
-  @override
-  void dispose() {
-    _folderNameController.dispose();
-    super.dispose();
-  }
+class _AddThuMucScreenState extends State<AddThuMucScreen> {
+  final _titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Thư mục mới'),
-        centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Thư mục mới',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         actions: [
           TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                // Process folder creation
-                print('Folder Name: ${_folderNameController.text}');
-                Navigator.pop(context, _folderNameController.text);
-              }
-            },
-            child: const Text(
-              'Tạo',
+            onPressed: _createThuMuc,
+            child: Text(
+              'Tạo thư mục',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.grey[400],
                 fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Tiêu đề',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _folderNameController,
-                decoration: InputDecoration(
-                  hintText: 'Nhập tiêu đề thư mục',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tiêu đề';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title Input
+            _buildInputField(
+              'Tiêu đề',
+              _titleController,
+              'Nhập tên thư mục',
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _buildInputField(
+      String label,
+      TextEditingController controller,
+      String hint, {
+        int maxLines = 1,
+      }) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 8),
+          TextFormField(
+            controller: controller,
+            maxLines: maxLines,
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 16,
+              ),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+            ),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _createThuMuc() {
+    if (_titleController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vui lòng nhập tên thư mục'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Thực hiện logic tạo thư mục ở đây
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Đã tạo thư mục "${_titleController.text}" thành công!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
   }
 }

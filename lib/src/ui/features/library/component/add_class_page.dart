@@ -1,133 +1,188 @@
 import 'package:flutter/material.dart';
 
-class NewClassScreen extends StatefulWidget {
-  const NewClassScreen({super.key});
+class AddLopHocScreen extends StatefulWidget {
+  const AddLopHocScreen({super.key});
 
   @override
-  State<NewClassScreen> createState() => _NewClassScreenState();
+  _AddLopHocScreenState createState() => _AddLopHocScreenState();
 }
 
-class _NewClassScreenState extends State<NewClassScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String _className = '';
-  String _classDescription = '';
-  bool _allowAdditions = true;
+class _AddLopHocScreenState extends State<AddLopHocScreen> {
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  bool _allowStudentInvite = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Lớp mới'),
-        centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Lớp mới',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         actions: [
-          TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                // Save class information
-                _formKey.currentState!.save();
-                // Process data
-                print('Class Name: $_className');
-                print('Description: $_classDescription');
-                print('Allow Additions: $_allowAdditions');
-                // Navigate back or show success
-                Navigator.pop(context);
-              }
-            },
-            child: const Text(
-              'Lưu',
-              style: TextStyle(color: Colors.white),
+          IconButton(
+            icon: Icon(Icons.check, color: Colors.blue),
+            onPressed: _createLopHoc,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Class Name Input
+            _buildInputField(
+              'Tên lớp',
+              _titleController,
+              'Nhập tên lớp học',
+            ),
+
+            SizedBox(height: 20),
+
+            // Description Input
+            _buildInputField(
+              'Mô tả',
+              _descriptionController,
+              'Thêm mô tả cho lớp học',
+              maxLines: 3,
+            ),
+
+            SizedBox(height: 30),
+
+            // Student Invite Permission
+            _buildPermissionToggle(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputField(
+      String label,
+      TextEditingController controller,
+      String hint, {
+        int maxLines = 1,
+      }) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 8),
+          TextFormField(
+            controller: controller,
+            maxLines: maxLines,
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 16,
+              ),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+            ),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Class Name Field
-              const Text(
-                'Tên lớp',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Nhập tên lớp',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tên lớp';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _className = value!,
-              ),
-              const SizedBox(height: 24),
+    );
+  }
 
-              // Class Description Field
-              const Text(
-                'Mô tả',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+  Widget _buildPermissionToggle() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Cho phép thành viên lớp thêm học phần và thành viên mới',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Nhập mô tả lớp',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-                maxLines: 3,
-                onSaved: (value) => _classDescription = value ?? '',
-              ),
-              const SizedBox(height: 24),
-
-              // Permission Switch
-              Row(
-                children: [
-                  Switch(
-                    value: _allowAdditions,
-                    onChanged: (value) {
-                      setState(() {
-                        _allowAdditions = value;
-                      });
-                    },
-                    activeColor: Colors.blue,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      'Cho phép thành viên lớp thêm học phần và thành viên mới',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+          SizedBox(width: 12),
+          Switch(
+            value: _allowStudentInvite,
+            onChanged: (value) {
+              setState(() {
+                _allowStudentInvite = value;
+              });
+            },
+            activeColor: Colors.white,
+            activeTrackColor: Colors.blue,
+            inactiveThumbColor: Colors.grey[400],
+            inactiveTrackColor: Colors.grey[300],
+          ),
+        ],
       ),
     );
+  }
+
+  void _createLopHoc() {
+    if (_titleController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vui lòng nhập tên lớp học'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Thực hiện logic tạo lớp học ở đây
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Đã tạo lớp học "${_titleController.text}" thành công!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 }
