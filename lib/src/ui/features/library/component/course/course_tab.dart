@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'library_item_widget.dart';
+import '../../../../../../core/domain/dtos/set_dto.dart';
+import '../../../../../../widgets/course_item.dart';
+
 
 class CourseTab extends StatelessWidget {
   final String selectedFilter;
@@ -8,32 +10,35 @@ class CourseTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<LibraryItem> libraryItems = [
-      LibraryItem(
-        title: 'ETS RC2 test 2',
-        subtitle: '95 thuật ngữ',
-        author: 'KhoiLee04',
-        date: 'Tháng 3 2025',
-        avatar: '👤',
+    final List<SetDto> libraryItems = [
+      SetDto(
+        name: 'ETS RC2 test 2',
+        cardCount: 95,
+        id: '',
+        topicId: '',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
-      LibraryItem(
-        title: 'TOEIC Vocabulary',
-        subtitle: '120 thuật ngữ',
-        author: 'StudyHelper',
-        date: 'Tháng 2 2025',
-        avatar: '📚',
+      SetDto(
+        name: 'TOEIC Vocabulary',
+        cardCount: 120,
+        id: '',
+        topicId: '',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
-      LibraryItem(
-        title: 'Business English',
-        subtitle: '80 thuật ngữ',
-        author: 'EngPro',
-        date: 'Tháng 2 2025',
-        avatar: '💼',
+      SetDto(
+        name: 'Business English',
+        cardCount: 80,
+        id: '',
+        topicId: '',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
     ];
 
     // Lọc danh sách theo selectedFilter
-    List<LibraryItem> filteredItems = libraryItems.where((item) {
+    List<SetDto> filteredItems = libraryItems.where((item) {
       if (selectedFilter == 'Tất cả') return true;
       // Thêm logic lọc khác ở đây
       return true;
@@ -78,7 +83,7 @@ class CourseTab extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               itemCount: filteredItems.length,
               itemBuilder: (context, index) {
-                return LibraryItemWidget(item: filteredItems[index]);
+                return CourseItem(item: filteredItems[index]);
               },
             ),
           ),

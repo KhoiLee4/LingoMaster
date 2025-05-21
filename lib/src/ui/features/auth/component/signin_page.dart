@@ -13,17 +13,17 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   bool _obscureText = true;
-  // controller 
+
+  // controller
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   // log in function
-  void _login() async{
+  void _login() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-    var req=await new AccountService().login(email, password);
-    if(req.Success == true) {
+    var req = await new AccountService().login(email, password);
+    if (req.Success == true) {
       AppRouter.router.navigateTo(context, "/home", replace: true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,6 +34,7 @@ class _SigninScreenState extends State<SigninScreen> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
