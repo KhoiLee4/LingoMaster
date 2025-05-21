@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lingo_master/core/data/NativeService/AccountService.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import '../../../../../core/navigation/routers.dart';
 
@@ -12,7 +13,27 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   bool _obscureText = true;
+  // controller 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
+
+  // log in function
+  void _login() async{
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    var req=await new AccountService().login(email, password);
+    if(req.Success == true) {
+      AppRouter.router.navigateTo(context, "/home", replace: true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(req.Message!),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +71,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
               // Email or username field
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'Email hoặc tên người dùng',
                   hintStyle: const TextStyle(color: Colors.black45),
@@ -67,6 +89,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
               // Password field
               TextField(
+                controller: _passwordController,
                 obscureText: _obscureText,
                 decoration: InputDecoration(
                   hintText: 'Mật khẩu',
@@ -99,10 +122,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    AppRouter.router
-                        .navigateTo(context, "/home", replace: true);
-                  },
+                  onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFD9DEE8),
                     shape: RoundedRectangleBorder(

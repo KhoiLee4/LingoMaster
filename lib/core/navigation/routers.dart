@@ -30,5 +30,6 @@ class AppRouter {
     CourseRouter.defineRoutes(router);
     ProfileRouter.defineRoutes(router);
     SettingRouter.defineRoutes(router);
+    
   }
 }
