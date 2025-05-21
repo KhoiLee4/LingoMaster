@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'library_item_widget.dart';
 
-class HocPhanTab extends StatelessWidget {
+class CourseTab extends StatelessWidget {
   final String selectedFilter;
 
-  const HocPhanTab({Key? key, required this.selectedFilter}) : super(key: key);
+  const CourseTab({Key? key, required this.selectedFilter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

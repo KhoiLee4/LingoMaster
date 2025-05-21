@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/navigation/routers.dart';
+
 class LibraryItemWidget extends StatelessWidget {
   final LibraryItem item;
 
@@ -22,7 +24,7 @@ class LibraryItemWidget extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          print('Tapped on ${item.title}');
+          AppRouter.router.navigateTo(context, "/coursepage");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

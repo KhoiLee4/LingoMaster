@@ -17,9 +17,11 @@ class _FolderScreenState extends State<FolderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFAAACBA),
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add, color: Colors.black),
@@ -44,11 +46,10 @@ class _FolderScreenState extends State<FolderScreen> {
         children: [
           Column(
             children: [
-              // Folder icon and title
               Center(
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
+                    // const SizedBox(height: 20),
                     Container(
                       width: 60,
                       height: 50,

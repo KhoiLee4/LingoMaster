@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/navigation/routers.dart';
+
 class FolderItemWidget extends StatelessWidget {
   final FolderItem item;
 
@@ -22,7 +24,7 @@ class FolderItemWidget extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          print('Tapped on folder ${item.title}');
+          AppRouter.router.navigateTo(context, "/folderpage");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

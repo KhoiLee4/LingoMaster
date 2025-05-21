@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'add_class_page.dart';
-import 'add_course_page.dart';
-import 'add_folder_page.dart';
-import 'class_page.dart';
-import 'course_page.dart';
-import 'folder_page.dart';
+import 'class/add_class_page.dart';
+import 'course/add_course_page.dart';
+import 'folder/add_folder_page.dart';
+import 'class/class_tab.dart';
+import 'course/course_tab.dart';
+import 'folder/folder_tab.dart';
 
 class LibraryScreen extends StatefulWidget {
+  const LibraryScreen({super.key});
+
   @override
   _LibraryScreenState createState() => _LibraryScreenState();
 }
@@ -124,15 +126,14 @@ class _LibraryScreenState extends State<LibraryScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                HocPhanTab(selectedFilter: _selectedFilter),
-                ThuMucTab(),
-                LopHocTab(),
+                CourseTab(selectedFilter: _selectedFilter),
+                FolderTab(),
+                ClassTab(),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -257,7 +258,8 @@ class _LibraryScreenState extends State<LibraryScreen>
             label: 'Hồ sơ',
           ),
         ],
-        currentIndex: 3, // Thư viện tab is selected
+        currentIndex: 3,
+        // Thư viện tab is selected
         onTap: (index) {
           // Handle navigation
         },

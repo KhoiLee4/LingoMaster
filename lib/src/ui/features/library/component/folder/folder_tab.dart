@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'folder_item_widget.dart';
 
-class ThuMucTab extends StatelessWidget {
+class FolderTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<FolderItem> folderItems = [
@@ -21,7 +21,7 @@ class ThuMucTab extends StatelessWidget {
         padding: EdgeInsets.all(16),
         itemCount: folderItems.length,
         itemBuilder: (context, index) {
-          return FolderItemWidget(item: folderItems[index]);
+            return FolderItemWidget(item: folderItems[index]);
         },
       ),
     );

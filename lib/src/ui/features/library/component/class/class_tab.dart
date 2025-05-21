@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'class_item_widget.dart';
 
-class LopHocTab extends StatelessWidget {
+class ClassTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<ClassItem> classItems = [

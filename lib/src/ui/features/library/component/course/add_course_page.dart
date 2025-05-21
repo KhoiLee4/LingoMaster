@@ -18,8 +18,8 @@ class _CreateHocPhanScreenState extends State<AddHocPhanScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.grey[700]),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Tạo học phần',

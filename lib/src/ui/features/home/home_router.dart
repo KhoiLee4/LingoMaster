@@ -1,10 +1,10 @@
 import 'package:fluro/fluro.dart';
 import 'component/activity_page.dart';
-import 'component/home_page.dart';
+import 'component/main_page.dart';
 
 class HomeRouter {
   static final Handler _homeHandler = Handler(
-    handlerFunc: (context, parameters) => HomeScreen(),
+    handlerFunc: (context, parameters) => MainScreen(),
   );
 
   static final Handler _activityHandler = Handler(

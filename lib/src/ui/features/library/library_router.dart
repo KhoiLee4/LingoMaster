@@ -1,11 +1,11 @@
 import 'package:fluro/fluro.dart';
 
-import 'component/add_class_page.dart';
-import 'component/add_course_page.dart';
-import 'component/add_folder_page.dart';
-import 'component/class_page.dart';
-import 'component/course_page.dart';
-import 'component/folder_page.dart';
+import 'component/class/add_class_page.dart';
+import 'component/course/add_course_page.dart';
+import 'component/folder/add_folder_page.dart';
+import 'component/class/class_tab.dart';
+import 'component/course/course_tab.dart';
+import 'component/folder/folder_tab.dart';
 import 'component/library_page.dart';
 
 

@@ -9,9 +9,9 @@ class ClassScreen extends StatefulWidget {
 
 class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final String className = "kkkk";  // Changed from "tết" to "kkkk"
+  final String className = "kkkk";
   bool isMenuOpen = false;
-  bool hasLessons = true;  // Set to true to show lessons instead of empty state
+  bool hasLessons = false;  // Set to true to show lessons instead of empty state
 
   @override
   void initState() {
@@ -25,11 +25,6 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
-  void _showMenu() {
-    setState(() {
-      isMenuOpen = true;
-    });
-  }
 
   void _hideMenu() {
     setState(() {
@@ -42,16 +37,56 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back navigation
-          },
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text('Lớp'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: _showMenu,
+          PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert), // biểu tượng 3 chấm
+            onSelected: (value) {
+              // Xử lý từng lựa chọn
+              switch (value) {
+                case 'invite':
+                // Mời thành viên
+                  print("Mời thành viên");
+                  break;
+                case 'add_course':
+                  print("Thêm học phần");
+                  break;
+                case 'add_folder':
+                  print("Thêm thư mục");
+                  break;
+                case 'report':
+                  print("Báo cáo");
+                  break;
+                case 'leave_class':
+                  print("Bỏ lớp học");
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'invite',
+                child: Text('Mời thành viên'),
+              ),
+              PopupMenuItem(
+                value: 'add_course',
+                child: Text('Thêm học phần'),
+              ),
+              PopupMenuItem(
+                value: 'add_folder',
+                child: Text('Thêm thư mục'),
+              ),
+              PopupMenuItem(
+                value: 'report',
+                child: Text('Báo cáo'),
+              ),
+              PopupMenuItem(
+                value: 'leave_class',
+                child: Text('Bỏ lớp học'),
+              ),
+            ],
           ),
         ],
       ),
@@ -125,99 +160,12 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
             ],
           ),
           // Popup menu when 3-dot icon is clicked
-          if (isMenuOpen)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Stack(
-                children: [
-                  // Invisible overlay to detect tap outside menu
-                  GestureDetector(
-                    onTap: _hideMenu,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0, right: 8),
-                    child: Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildMenuItem('Mời thành viên', Icons.person_add),
-                          _buildMenuItem('Thêm học phần', Icons.post_add),
-                          _buildMenuItem('Thêm thư mục', Icons.create_new_folder),
-                          _buildMenuItem('Báo cáo', Icons.flag),
-                          _buildMenuItem('Bỏ lớp học', Icons.exit_to_app),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back),
-            label: '',
-          ),
-        ],
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
       ),
     );
   }
 
-  Widget _buildMenuItem(String title, IconData? icon) {
-    return InkWell(
-      onTap: () {
-        _hideMenu();
-        // Handle menu item tap
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Row(
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 20, color: Colors.transparent),
-              const SizedBox(width: 16),
-            ],
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Empty lessons content widget
+  // Empty lessons content widgets
   Widget _buildEmptyLessonsContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -249,7 +197,7 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
     );
   }
 
-  // Lessons content widget when there are lessons
+  // Lessons content widgets when there are lessons
   Widget _buildLessonsContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
