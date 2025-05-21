@@ -1,6 +1,8 @@
 import 'package:fluro/fluro.dart';
+import 'package:lingo_master/src/ui/features/home/component/search_page.dart';
 import 'component/activity_page.dart';
 import 'component/main_page.dart';
+import 'component/search_all.dart';
 
 class HomeRouter {
   static final Handler _homeHandler = Handler(
@@ -9,6 +11,12 @@ class HomeRouter {
 
   static final Handler _activityHandler = Handler(
     handlerFunc: (context, parameters) => ActivityScreen(),
+  );
+  static final Handler _searchHandler = Handler(
+    handlerFunc: (context, parameters) => SearchScreen(),
+  );
+  static final Handler _searchAllHandler = Handler(
+    handlerFunc: (context, parameters) => SearchALLScreen(),
   );
   //
   // static final Handler _signupHandler = Handler(
@@ -32,6 +40,16 @@ class HomeRouter {
     router.define(
       "/activity",
       handler: _activityHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/search",
+      handler: _searchHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/searchAll",
+      handler: _searchAllHandler,
       transitionType: TransitionType.inFromRight,
     );
     // router.define(
