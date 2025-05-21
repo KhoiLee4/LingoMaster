@@ -4,6 +4,8 @@ import 'package:lingo_master/widgets/class_item.dart';
 import 'package:lingo_master/widgets/folder_item.dart';
 import 'package:lingo_master/widgets/course_item.dart';
 
+import '../../../../../core/navigation/routers.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -56,20 +58,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 16),
                   // Search bar
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Học phần, sách giáo khoa, câu hỏi',
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  GestureDetector(
+                    onTap: () {
+                      // Điều hướng sang màn hình tìm kiếm hoặc hiện dialog,...
+                      AppRouter.router.navigateTo(context, "/search", replace: true);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.search, color: Colors.grey),
+                          SizedBox(width: 8),
+                          Text(
+                            'Tìm kiếm',
+                            style: TextStyle(color: AppColors.neutralGray700, fontSize: 14),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
