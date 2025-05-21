@@ -60,12 +60,13 @@ class _SearchScreenState extends State<SearchScreen> {
           IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.grey),
             onPressed: () {
-              if (_isSearching) {
-                setState(() {
-                  _isSearching = false;
-                  _searchController.clear();
-                });
-              }
+              // if (_isSearching) {
+              //   setState(() {
+              //     _isSearching = false;
+              //     _searchController.clear();
+              //   });
+              // }
+              AppRouter.router.navigateTo(context, "/home", replace: true);
             },
           ),
           Expanded(

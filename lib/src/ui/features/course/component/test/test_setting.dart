@@ -40,6 +40,7 @@ class _TestSettingState extends State<TestSetting> {
           icon: Icon(Icons.close, color: Colors.grey[700], size: 30),
           onPressed: () {
             // Close action
+            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
           },
         ),
       ),

@@ -42,7 +42,9 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
           leadingWidth: 40,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-            onPressed: () {},
+            onPressed: () {
+              AppRouter.router.navigateTo(context, "/search", replace: true);
+            },
           ),
           title: Container(
             height: 40,

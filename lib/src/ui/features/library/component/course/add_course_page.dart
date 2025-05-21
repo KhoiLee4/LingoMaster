@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // screens/add_hoc_phan_screen.dart
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/design_systems/theme/app_colors.dart';
+
 class AddHocPhanScreen extends StatefulWidget {
   @override
   _CreateHocPhanScreenState createState() => _CreateHocPhanScreenState();
@@ -14,8 +16,9 @@ class _CreateHocPhanScreenState extends State<AddHocPhanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.primaryWhite,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black87),
@@ -211,25 +214,7 @@ class _CreateHocPhanScreenState extends State<AddHocPhanScreen> {
         backgroundColor: Colors.blue,
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.crop_square),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
+
     );
   }
 }
@@ -247,8 +232,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.primaryWhite,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.grey[700]),
@@ -387,25 +373,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.crop_square),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
+
     );
   }
 }
