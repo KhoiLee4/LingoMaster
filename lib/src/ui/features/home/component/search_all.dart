@@ -408,7 +408,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 1,
           ),
@@ -422,7 +422,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: AppColors.neutralGray100,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Row(
@@ -432,7 +432,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
                   const SizedBox(width: 5),
                   Text(
                     activeUsers,
-                    style: const TextStyle(fontSize: 12, color: Colors.indigo),
+                    style: const TextStyle(fontSize: 12, color: AppColors.neutralGray800, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -516,7 +516,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 1,
           ),
@@ -613,7 +613,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 1,
           ),
@@ -679,7 +679,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 1,
           ),
@@ -736,7 +736,7 @@ class _SearchALLScreenState extends State<SearchALLScreen> with TickerProviderSt
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey,
             spreadRadius: 1,
             blurRadius: 1,
           ),
