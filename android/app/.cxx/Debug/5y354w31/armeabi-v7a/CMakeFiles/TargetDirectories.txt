@@ -1,0 +1,2 @@
+C:/Serect/lingo_master/LingoMaster/android/app/.cxx/Debug/5y354w31/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Serect/lingo_master/LingoMaster/android/app/.cxx/Debug/5y354w31/armeabi-v7a/CMakeFiles/rebuild_cache.dir
