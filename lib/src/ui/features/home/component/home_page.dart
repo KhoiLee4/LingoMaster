@@ -7,6 +7,7 @@ import 'package:lingo_master/widgets/course_item.dart';
 import '../../../../../core/domain/dtos/class_dto.dart';
 import '../../../../../core/domain/dtos/folder_dto.dart';
 import '../../../../../core/domain/dtos/set_dto.dart';
+import '../../../../../core/navigation/routers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,15 +66,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Học phần, sách giáo khoa, câu hỏi',
+                    child: TextField(
+                      readOnly: true,
+                      onTap: () {
+                        AppRouter.router.navigateTo(context, "/search", replace: true);
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Tìm kiếm',
                         prefixIcon: Icon(Icons.search),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
-                  ),
+                  )
+
                 ],
               ),
             ),

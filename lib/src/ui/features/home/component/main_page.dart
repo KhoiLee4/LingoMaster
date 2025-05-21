@@ -67,6 +67,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColors.primaryWhite,
         currentIndex: _currentIndex,
         onTap: (index) {
           if (index == 2) {
