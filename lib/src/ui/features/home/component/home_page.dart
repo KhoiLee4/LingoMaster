@@ -4,6 +4,10 @@ import 'package:lingo_master/widgets/class_item.dart';
 import 'package:lingo_master/widgets/folder_item.dart';
 import 'package:lingo_master/widgets/course_item.dart';
 
+import '../../../../../core/domain/dtos/class_dto.dart';
+import '../../../../../core/domain/dtos/folder_dto.dart';
+import '../../../../../core/domain/dtos/set_dto.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -105,20 +109,32 @@ class _HomeScreenState extends State<HomeScreen> {
               // Thu muc section
               _buildSection('Thư mục', [
                 FolderItem(
-                  name: 'KKKK',
-                  author: 'KhoiLee04',
+                  item: FolderDto(
+                    name: 'test',
+                    description: 'KhoiLee04',
+                    id: '',
+                  ),
                 ),
                 FolderItem(
-                  name: 'KKKK',
-                  author: 'KhoiLee04',
+                  item: FolderDto(
+                    name: 'test',
+                    description: 'KhoiLee04',
+                    id: '',
+                  ),
                 ),
                 FolderItem(
-                  name: 'KKKK',
-                  author: 'KhoiLee04',
+                  item: FolderDto(
+                    name: 'test',
+                    description: 'KhoiLee04',
+                    id: '',
+                  ),
                 ),
                 FolderItem(
-                  name: 'KKKK',
-                  author: 'KhoiLee04',
+                  item: FolderDto(
+                    name: 'test',
+                    description: 'KhoiLee04',
+                    id: '',
+                  ),
                 ),
               ]),
 
@@ -131,10 +147,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Thu muc section
               _buildSection('Học phần', [
-                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
-                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
-                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
-                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
+                CourseItem(
+                  item: SetDto(
+                    name: 'ETS RC2 test 2',
+                    cardCount: 95,
+                    id: '',
+                    topicId: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                ),
+                CourseItem(
+                  item: SetDto(
+                    name: 'ETS RC2 test 2',
+                    cardCount: 95,
+                    id: '',
+                    topicId: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                ),
+                CourseItem(
+                  item: SetDto(
+                    name: 'ETS RC2 test 2',
+                    cardCount: 95,
+                    id: '',
+                    topicId: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                ),
+                CourseItem(
+                  item: SetDto(
+                    name: 'ETS RC2 test 2',
+                    cardCount: 95,
+                    id: '',
+                    topicId: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                ),
               ]),
 
               const SizedBox(height: 20),
@@ -142,24 +194,52 @@ class _HomeScreenState extends State<HomeScreen> {
               // Lop hoc section
               _buildSection('Lớp học', [
                 ClassItem(
-                  name: 'tét',
-                  lessons: '0 học phần',
-                  members: '1 thành viên',
+                  item: ClassRoomDto(
+                    className: 'tét',
+                    classCode: '0 học phần',
+                    id: '',
+                    description: '',
+                    createdBy: '',
+                    createdAt: DateTime.now(),
+                    isDeleted: true,
+                  ),
+                  hasIcon: false,
                 ),
                 ClassItem(
-                  name: 'tét',
-                  lessons: '0 học phần',
-                  members: '1 thành viên',
+                  item: ClassRoomDto(
+                    className: 'tét',
+                    classCode: '0 học phần',
+                    id: '',
+                    description: '',
+                    createdBy: '',
+                    createdAt: DateTime.now(),
+                    isDeleted: true,
+                  ),
+                  hasIcon: false,
                 ),
                 ClassItem(
-                  name: 'tét',
-                  lessons: '0 học phần',
-                  members: '1 thành viên',
+                  item: ClassRoomDto(
+                    className: 'tét',
+                    classCode: '0 học phần',
+                    id: '',
+                    description: '',
+                    createdBy: '',
+                    createdAt: DateTime.now(),
+                    isDeleted: true,
+                  ),
+                  hasIcon: false,
                 ),
                 ClassItem(
-                  name: 'tét',
-                  lessons: '0 học phần',
-                  members: '1 thành viên',
+                  item: ClassRoomDto(
+                    className: 'tét',
+                    classCode: '0 học phần',
+                    id: '',
+                    description: '',
+                    createdBy: '',
+                    createdAt: DateTime.now(),
+                    isDeleted: true,
+                  ),
+                  hasIcon: false,
                 ),
               ]),
 
@@ -191,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: title == 'Lớp học' ? 110 : 140,
+          height: title == 'Lớp học' ? 130 : 150,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             scrollDirection: Axis.horizontal,
