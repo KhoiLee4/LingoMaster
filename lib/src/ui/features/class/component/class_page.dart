@@ -11,7 +11,7 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
   late TabController _tabController;
   final String className = "kkkk";
   bool isMenuOpen = false;
-  bool hasLessons = false;  // Set to true to show lessons instead of empty state
+  bool hasLessons = true;  // Set to true to show lessons instead of empty state
 
   @override
   void initState() {

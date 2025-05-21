@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'class_item_widget.dart';
+import '../../../../../../core/domain/dtos/class_dto.dart';
+import '../../../../../../widgets/class_item.dart';
 
 class ClassTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<ClassItem> classItems = [
-      ClassItem(
-        title: 'tét',
-        subtitle: '0 học phần',
+    final List<ClassRoomDto> classItems = [
+      ClassRoomDto(
+        className: 'tét',
+        classCode: '0 học phần',
+        id: '',
+        description: '',
+        createdBy: '',
+        createdAt: DateTime.now(),
+        isDeleted: true,
       ),
-      ClassItem(
-        title: 'lớp toeic',
-        subtitle: '62 học phần',
+      ClassRoomDto(
+        className: 'lớp toeic',
+        classCode: '0 học phần',
+        id: '',
+        description: '',
+        createdBy: '',
+        createdAt: DateTime.now(),
+        isDeleted: true,
       ),
     ];
 
@@ -21,7 +32,7 @@ class ClassTab extends StatelessWidget {
         padding: EdgeInsets.all(16),
         itemCount: classItems.length,
         itemBuilder: (context, index) {
-          return ClassItemWidget(item: classItems[index]);
+          return ClassItem(item: classItems[index], hasIcon: true,);
         },
       ),
     );

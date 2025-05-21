@@ -1,61 +1,85 @@
 import 'package:flutter/material.dart';
 
-class CourseItem extends StatelessWidget {
-  final String name;
-  final int count;
-  final String author;
+import '../core/domain/dtos/set_dto.dart';
+import '../core/navigation/routers.dart';
 
-  const CourseItem({super.key, required this.name, required this.count, required this.author});
+class CourseItem extends StatelessWidget {
+  final SetDto item;
+
+  const CourseItem({super.key,  required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
-      // height: 0,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '$count thuật ngữ',
-              style: const TextStyle(
-                fontSize: 18,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                const CircleAvatar(
-                  radius: 12,
-                  backgroundColor: Colors.grey,
-                  child: Icon(Icons.person, size: 16, color: Colors.white),
+      child: InkWell(
+        onTap: () {
+          AppRouter.router.navigateTo(context, "/coursepage");
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.name,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  author,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
+              ),
+              SizedBox(height: 8),
+              Text(
+                '${item.cardCount} thuật ngữ',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+              SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '👤',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(width: 8),
+                  Text(
+                    '${item.description}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

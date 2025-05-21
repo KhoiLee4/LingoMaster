@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'folder_item_widget.dart';
+
+import '../../../../../../core/domain/dtos/folder_dto.dart';
+import '../../../../../../widgets/folder_item.dart';
 
 class FolderTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<FolderItem> folderItems = [
-      FolderItem(
-        title: 'test',
-        author: 'KhoiLee04',
+    final List<FolderDto> folderItems = [
+      FolderDto(
+        name: 'test',
+        description: 'KhoiLee04',
+        id: '',
       ),
-      FolderItem(
-        title: 'kkkkk',
-        author: 'KhoiLee04',
+      FolderDto(
+        name: 'kkkkk',
+        description: 'KhoiLee04',
+        id: '',
       ),
     ];
 
@@ -21,7 +25,7 @@ class FolderTab extends StatelessWidget {
         padding: EdgeInsets.all(16),
         itemCount: folderItems.length,
         itemBuilder: (context, index) {
-            return FolderItemWidget(item: folderItems[index]);
+            return FolderItem(item: folderItems[index]);
         },
       ),
     );

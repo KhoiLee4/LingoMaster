@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as httpClient;
 import 'package:http/http.dart' as _client;
 import 'package:lingo_master/core/data/NativeService/BaseService.dart';
 import 'package:lingo_master/core/domain/dtos/register_user_dto.dart';
@@ -69,7 +68,7 @@ class AccountService extends BaseService {
       RegisterUserDto reg
     ) async {
         try {
-        final response = await httpClient.post(
+        final response = await _client.post(
           Uri.parse(url_api + '/api/Account/RegisterWithCode'),
           headers: {
           'Content-Type': 'application/json',
