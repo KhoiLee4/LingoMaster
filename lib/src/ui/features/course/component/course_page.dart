@@ -64,7 +64,7 @@ class _CourseScreenState extends State<CourseScreen> {
             color: AppColors.neutralGray600,
             size: 30,
           ),
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(

@@ -411,7 +411,7 @@ class SettingToggle extends StatelessWidget {
   }
 }
 
-// Add a number input widget for question count
+// Add a number input widgets for question count
 class NumberInputField extends StatefulWidget {
   final int value;
   final int maxValue;
@@ -506,7 +506,7 @@ class _NumberInputFieldState extends State<NumberInputField> {
 //   }
 // }
 //
-// // Add a number input widget for question count
+// // Add a number input widgets for question count
 // class NumberInputField extends StatefulWidget {
 //   final int value;
 //   final int maxValue;
@@ -529,7 +529,7 @@ class _NumberInputFieldState extends State<NumberInputField> {
 //   @override
 //   void initState() {
 //     super.initState();
-//     _controller = TextEditingController(text: widget.value.toString());
+//     _controller = TextEditingController(text: widgets.value.toString());
 //   }
 //
 //   @override
@@ -550,11 +550,11 @@ class _NumberInputFieldState extends State<NumberInputField> {
 //       onChanged: (value) {
 //         int? newValue = int.tryParse(value);
 //         if (newValue != null) {
-//           if (newValue > widget.maxValue) {
-//             newValue = widget.maxValue;
-//             _controller.text = widget.maxValue.toString();
+//           if (newValue > widgets.maxValue) {
+//             newValue = widgets.maxValue;
+//             _controller.text = widgets.maxValue.toString();
 //           }
-//           widget.onChanged(newValue);
+//           widgets.onChanged(newValue);
 //         }
 //       },
 //     );

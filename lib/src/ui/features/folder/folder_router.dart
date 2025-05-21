@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart';
-import '../library/component/folder_page.dart';
+import 'component/folder_page.dart';
 
 class FolderRouter {
   static final Handler _mainfolderHandler = Handler(

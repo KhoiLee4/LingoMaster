@@ -1,6 +1,5 @@
 import 'package:fluro/fluro.dart';
-
-import '../library/component/class_page.dart';
+import 'component/class_page.dart';
 
 class ClassRouter {
   static final Handler _mainclassHandler = Handler(
