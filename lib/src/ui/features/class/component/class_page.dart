@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ClassScreen extends StatefulWidget {
-  const ClassScreen({super.key});
+  const ClassScreen({Key? key}) : super(key: key);
 
   @override
   State<ClassScreen> createState() => _ClassScreenState();
@@ -9,7 +9,9 @@ class ClassScreen extends StatefulWidget {
 
 class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _showMenu = false;
+  final String className = "kkkk";
+  bool isMenuOpen = false;
+  bool hasLessons = false;  // Set to true to show lessons instead of empty state
 
   @override
   void initState() {
@@ -23,111 +25,132 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
+
+  void _hideMenu() {
+    setState(() {
+      isMenuOpen = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text('Lớp'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              setState(() {
-                _showMenu = !_showMenu;
-              });
+          PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert), // biểu tượng 3 chấm
+            onSelected: (value) {
+              // Xử lý từng lựa chọn
+              switch (value) {
+                case 'invite':
+                // Mời thành viên
+                  print("Mời thành viên");
+                  break;
+                case 'add_course':
+                  print("Thêm học phần");
+                  break;
+                case 'add_folder':
+                  print("Thêm thư mục");
+                  break;
+                case 'report':
+                  print("Báo cáo");
+                  break;
+                case 'leave_class':
+                  print("Bỏ lớp học");
+                  break;
+              }
             },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'invite',
+                child: Text('Mời thành viên'),
+              ),
+              PopupMenuItem(
+                value: 'add_course',
+                child: Text('Thêm học phần'),
+              ),
+              PopupMenuItem(
+                value: 'add_folder',
+                child: Text('Thêm thư mục'),
+              ),
+              PopupMenuItem(
+                value: 'report',
+                child: Text('Báo cáo'),
+              ),
+              PopupMenuItem(
+                value: 'leave_class',
+                child: Text('Bỏ lớp học'),
+              ),
+            ],
           ),
         ],
       ),
       body: Stack(
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  '0 học phần',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  'tết',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        hasLessons ? '1 học phần' : '0 học phần',
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      className,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               TabBar(
                 controller: _tabController,
-                tabs: const [
-                  Tab(text: 'HỌC PHẦN'),
-                  Tab(text: 'THÀNH VIÊN'),
-                ],
                 labelColor: Colors.blue,
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: Colors.blue,
                 indicatorWeight: 3,
+                tabs: const [
+                  Tab(text: 'HỌC PHẦN'),
+                  Tab(text: 'THÀNH VIÊN'),
+                ],
               ),
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    // First tab content - Học phần
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Lớp học này không có học phần nào',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 32),
-                            child: Text(
-                              'Thêm học phần để chia sẻ với lớp của bạn.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text(
-                              'Thêm học phần',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Second tab content - Thành viên
+                    // First tab content - Lessons section
+                    hasLessons
+                        ? _buildLessonsContent()
+                        : _buildEmptyLessonsContent(),
+                    // Second tab content - Members section
                     ListView(
                       children: [
+                        // Just show one member for demonstration
                         ListTile(
                           leading: CircleAvatar(
-                            // backgroundImage: NetworkError(
-                            //   "https://placedog.net/100/100",
-                            // ),
+                            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
                             radius: 20,
-                            backgroundColor: Colors.grey[300],
                           ),
-                          title: const Text(
-                            'KhoiLee04',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          title: const Text('KhoiLee04'),
                         ),
                       ],
                     ),
@@ -136,96 +159,108 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
               ),
             ],
           ),
-
-          // Popup menu
-          if (_showMenu)
-            Positioned(
-              top: 0,
-              right: 12,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                width: 200,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildMenuItem('Mời thành viên', Icons.person_add_outlined),
-                    _buildMenuItem('Thêm học phần', Icons.add_box_outlined),
-                    _buildMenuItem('Thêm thư mục', Icons.folder_outlined),
-                    _buildMenuItem('Báo cáo', Icons.flag_outlined),
-                    _buildMenuItem('Bỏ lớp học', Icons.logout_outlined),
-                  ],
-                ),
-              ),
-            ),
+          // Popup menu when 3-dot icon is clicked
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_box_outline_blank),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back_ios_new),
-            label: '',
-          ),
-        ],
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
       ),
     );
   }
 
-  Widget _buildMenuItem(String title, IconData? icon) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _showMenu = false;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 20, color: Colors.black54),
-              const SizedBox(width: 12),
-            ],
-            Text(title),
-          ],
+  // Empty lessons content widgets
+  Widget _buildEmptyLessonsContent() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Lớp học này không có học phần nào',
+          style: TextStyle(fontSize: 18),
         ),
-      ),
+        const SizedBox(height: 8),
+        const Text(
+          'Thêm học phần để chia sẻ với lớp của bạn.',
+          style: TextStyle(color: Colors.grey),
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: () {
+            // Handle add lesson
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          child: const Text(
+            'Thêm học phần',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Lessons content widgets when there are lessons
+  Widget _buildLessonsContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            'ÍT GIÂY TRƯỚC',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Meetings',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    '7 thuật ngữ',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                        radius: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'KNgao1',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
-
-// Just a placeholder for network image that might fail to load
-// class NetworkError extends ImageProvider<NetworkError> {
-//   final String url;
-//
-//   NetworkError(this.url);
-//
-//   @override
-//   Future<NetworkError> obtainKey(ImageConfiguration configuration) {
-//     return SynchronousFuture<NetworkError>(this);
-//   }
-//
-//   @override
-//   ImageStreamCompleter load(NetworkError key, DecoderCallback decode) {
-//     return NetworkImage(url).load(NetworkImage(url), decode);
-//   }
-// }

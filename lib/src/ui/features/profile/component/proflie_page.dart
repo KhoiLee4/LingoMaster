@@ -1,108 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/navigation/routers.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      // ),
       body: Column(
         children: [
-          // Status bar with time and icons
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '21:56',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Row(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.wifi, size: 18),
-                        const SizedBox(width: 2),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              '15.0',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            const Text(
-                              'KB/s',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Vô',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        const Text(
-                          'LTE',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.signal_cellular_alt, size: 18),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.signal_cellular_alt, size: 18),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 40,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black38),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 4),
-                            child: Text(
-                              '58',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Profile and upgrade section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(top: 50, right: 20,bottom: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -134,7 +47,8 @@ class ProfileScreen extends StatelessWidget {
                 const CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.grey,
-                  backgroundImage: NetworkImage('https://via.placeholder.com/80'),
+                  backgroundImage:
+                      NetworkImage('https://via.placeholder.com/80'),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -165,7 +79,9 @@ class ProfileScreen extends StatelessWidget {
                   'Cài đặt của bạn',
                   style: TextStyle(fontSize: 18),
                 ),
-                onTap: () {},
+                onTap: () {
+                  AppRouter.router.navigateTo(context, "/setting");
+                },
               ),
             ),
           ),
@@ -226,10 +142,10 @@ class ProfileScreen extends StatelessWidget {
                   Stack(
                     alignment: Alignment.center,
                     children: [
-                      Image.asset(
-                        'assets/flame.png',
-                        height: 60,
-                        color: Colors.orange,
+                      const Icon(
+                        Icons.calendar_today,
+                        size: 50,
+                        color: Colors.grey,
                       ),
                       const Text(
                         '1',
@@ -271,44 +187,6 @@ class ProfileScreen extends StatelessWidget {
           ),
 
           const Spacer(),
-
-          // Bottom navigation bar
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Icons.home, 'Trang chủ', false),
-                _buildNavItem(Icons.description, 'Lời giải', false),
-                _buildAddButton(),
-                _buildNavItem(Icons.folder, 'Thư viện', false),
-                _buildNavItem(Icons.person, 'Hồ sơ', true),
-              ],
-            ),
-          ),
-
-          // Android navigation buttons
-          Container(
-            height: 40,
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Icon(Icons.menu, color: Colors.grey.shade700),
-                ),
-                Expanded(
-                  child: Icon(Icons.crop_square, color: Colors.grey.shade700),
-                ),
-                Expanded(
-                  child: Icon(Icons.arrow_back_ios, color: Colors.grey.shade700),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -330,7 +208,8 @@ class ProfileScreen extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isActive ? Colors.orange.withOpacity(0.2) : Colors.transparent,
+            color:
+                isActive ? Colors.orange.withOpacity(0.2) : Colors.transparent,
           ),
           child: Center(
             child: Text(

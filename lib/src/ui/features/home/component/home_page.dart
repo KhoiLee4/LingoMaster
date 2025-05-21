@@ -1,446 +1,464 @@
 import 'package:flutter/material.dart';
+import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+import 'package:lingo_master/widgets/class_item.dart';
+import 'package:lingo_master/widgets/folder_item.dart';
+import 'package:lingo_master/widgets/course_item.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _showNotifications = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            _buildSearchBar(),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+      // backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          // AppBar dạng cong
+          ClipPath(
+            clipper: BottomWaveClipper(),
+            child: Container(
+              padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+              height: 225,
+              color: AppColors.primaryBlue,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'LingoMater',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showNotifications = !_showNotifications;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildStudySection(),
-                          _buildAchievementSection(),
-                          _buildLearningSection(),
-                          _buildBrowseTopicsSection(),
-                        ],
+                  const SizedBox(height: 16),
+                  // Search bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Học phần, sách giáo khoa, câu hỏi',
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-            _buildBottomNavigationBar(),
-          ],
+          ),
+          // Nội dung phía dưới
+          // if (_showNotifications) _buildNotificationsOverlay(),
+          // _buildNotificationsOverlay(),
+          Expanded(
+            child: _buildHomeContent(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Main content sections with horizontal scrolling categories
+  Widget _buildHomeContent() {
+    return SingleChildScrollView(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(30),
+          //   topRight: Radius.circular(30),
+          // ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Quizlet',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Row(
+        // margin: const EdgeInsets.only(top: 16),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFC107),
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+              // Thu muc section
+              _buildSection('Thư mục', [
+                FolderItem(
+                  name: 'KKKK',
+                  author: 'KhoiLee04',
                 ),
-                child: const Text('Dùng thử miễn phí'),
-              ),
-              const SizedBox(width: 10),
-              const Icon(Icons.notifications_outlined, color: Colors.white),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+                FolderItem(
+                  name: 'KKKK',
+                  author: 'KhoiLee04',
+                ),
+                FolderItem(
+                  name: 'KKKK',
+                  author: 'KhoiLee04',
+                ),
+                FolderItem(
+                  name: 'KKKK',
+                  author: 'KhoiLee04',
+                ),
+              ]),
 
-  Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Học phần, sách giáo khoa, câu hỏi',
-          hintStyle: TextStyle(color: Colors.grey[600]),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 15),
-        ),
-      ),
-    );
-  }
+              const SizedBox(height: 20),
 
-  Widget _buildStudySection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Học phần',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'TOEIC 600 từ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: NetworkImage('https://picsum.photos/100/100'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '26 thuật ngữ',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 12,
-                      backgroundImage: NetworkImage('https://picsum.photos/50/50'),
-                    ),
-                    const SizedBox(width: 6),
-                    const Text('KNgao1'),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+              // Thanh tuu section with calendar
+              _buildAchievementSection(),
 
-  Widget _buildAchievementSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Thành tựu',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Hiện chưa có chuỗi nào',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.calendar_today, color: Colors.grey, size: 24),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Hãy học để bắt đầu chuỗi mới của bạn!',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(
-                    7,
-                        (index) => Column(
-                      children: [
-                        Text(
-                          ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index],
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          ['6', '7', '8', '9', '10', '11', '12'][index],
-                          style: TextStyle(
-                            fontWeight: index == 5 ? FontWeight.bold : FontWeight.normal,
-                            color: index == 5 ? Colors.black : Colors.grey,
-                          ),
-                        ),
-                        if (index == 5)
-                          Container(
-                            margin: const EdgeInsets.only(top: 4),
-                            width: 4,
-                            height: 4,
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+              const SizedBox(height: 20),
 
-  Widget _buildLearningSection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Duyệt theo chủ đề',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            childAspectRatio: 1.1,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            children: [
-              _buildTopicItem(
-                  icon: Icons.translate,
-                  color: Colors.purple,
-                  title: 'Ngôn ngữ'
-              ),
-              _buildTopicItem(
-                  icon: Icons.science,
-                  color: Colors.blue,
-                  title: 'Khoa học'
-              ),
-              _buildTopicItem(
-                  icon: Icons.brush,
-                  color: Colors.red,
-                  title: 'Nghệ thuật'
-              ),
-              _buildTopicItem(
-                  icon: Icons.calculate,
-                  color: Colors.orange,
-                  title: 'Toán học'
-              ),
-              _buildTopicItem(
-                  icon: Icons.public,
-                  color: Colors.teal,
-                  title: 'Khoa học xã hội'
-              ),
+              // Thu muc section
+              _buildSection('Học phần', [
+                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
+                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
+                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
+                CourseItem(name: 'test', count: 95, author: 'KhoiLee04'),
+              ]),
+
+              const SizedBox(height: 20),
+
+              // Lop hoc section
+              _buildSection('Lớp học', [
+                ClassItem(
+                  name: 'tét',
+                  lessons: '0 học phần',
+                  members: '1 thành viên',
+                ),
+                ClassItem(
+                  name: 'tét',
+                  lessons: '0 học phần',
+                  members: '1 thành viên',
+                ),
+                ClassItem(
+                  name: 'tét',
+                  lessons: '0 học phần',
+                  members: '1 thành viên',
+                ),
+                ClassItem(
+                  name: 'tét',
+                  lessons: '0 học phần',
+                  members: '1 thành viên',
+                ),
+              ]),
+
+              const SizedBox(height: 20),
+
+              // Duyet theo chu de section
+              _buildCategoriesSection(),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopicItem({required IconData icon, required Color color, required String title}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBrowseTopicsSection() {
-    return const SizedBox(height: 80); // Added for bottom padding
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 10,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, 'Trang chủ', true),
-            _buildNavItem(Icons.description, 'Lời giải', false),
-            _buildCenterButton(),
-            _buildNavItem(Icons.folder, 'Thư viện', false),
-            _buildNavItem(Icons.access_time, 'Hồ sơ', false),
-          ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive) {
+  // Section builder with title and horizontal scrollable content
+  Widget _buildSection(String title, List<Widget> items) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          color: isActive ? const Color(0xFF3B5CFA) : Colors.grey,
-          size: 24,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: isActive ? const Color(0xFF3B5CFA) : Colors.grey,
+        const SizedBox(height: 12),
+        SizedBox(
+          height: title == 'Lớp học' ? 110 : 140,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            scrollDirection: Axis.horizontal,
+            children: items,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildCenterButton() {
+  // Achievement section with calendar
+  Widget _buildAchievementSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Thành tựu',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            children: [
+              // Achievement message
+              const Text(
+                'Hiện chưa có chuỗi nào',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              // Calendar icon
+              const Icon(
+                Icons.calendar_today,
+                size: 50,
+                color: Colors.grey,
+              ),
+              const SizedBox(height: 24),
+              // Encouragement message
+              const Text(
+                'Hãy học để bắt đầu chuỗi mới của bạn!',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              // Week calendar
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildCalendarDay('S', '13'),
+                  _buildCalendarDay('M', '14'),
+                  _buildCalendarDay('T', '15', isActive: true),
+                  _buildCalendarDay('W', '16'),
+                  _buildCalendarDay('T', '17'),
+                  _buildCalendarDay('F', '18'),
+                  _buildCalendarDay('S', '19'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Calendar day item
+  Widget _buildCalendarDay(String day, String date, {bool isActive = false}) {
+    return Column(
+      children: [
+        Text(
+          day,
+          style: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          date,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        if (isActive)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            width: 4,
+            height: 4,
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.circle,
+            ),
+          ),
+      ],
+    );
+  }
+
+  // Categories section
+  Widget _buildCategoriesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Duyệt theo chủ đề',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        // const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            childAspectRatio: 1.2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            children: [
+              _buildCategoryItem('Ngôn ngữ', Colors.purple, Icons.translate),
+              _buildCategoryItem('Khoa học', Colors.blue, Icons.science),
+              _buildCategoryItem('Nghệ thuật', Colors.pink, Icons.brush),
+              _buildCategoryItem('Toán học', Colors.amber, Icons.calculate),
+              _buildCategoryItem('Khoa học xã hội', Colors.teal, Icons.public),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Category item
+  Widget _buildCategoryItem(String name, Color color, IconData icon) {
     return Container(
-      width: 50,
-      height: 50,
       decoration: BoxDecoration(
-        color: const Color(0xFF3B5CFA),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
-            blurRadius: 8,
-            spreadRadius: 2,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(fontSize: 12),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
-      child: const Icon(Icons.add, color: Colors.white, size: 30),
     );
   }
+
+  // Notifications overlay
+  Widget _buildNotificationsOverlay() {
+    return Positioned.fill(
+      child: Container(
+        color: Colors.black54,
+        child: Column(
+          children: [
+            AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.close, color: Colors.black),
+                onPressed: () {
+                  setState(() {
+                    _showNotifications = false;
+                  });
+                },
+              ),
+              title: const Text(
+                'Hoạt động',
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Colors.amber,
+                        child: Icon(Icons.cake, color: Colors.white),
+                      ),
+                      title: RichText(
+                        text: const TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: 'Thêm tuổi mới, thêm thông thái! ',
+                              style: TextStyle(fontWeight: FontWeight.normal),
+                            ),
+                            TextSpan(
+                              text:
+                                  'Cùng học cách nói "chúc mừng sinh nhật" bằng một ngôn ngữ mới.',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      subtitle: const Text('It'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tạo phần cong dưới AppBar
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 35); // Đi tới gần đáy
+    path.quadraticBezierTo(
+      size.width / 2, size.height, // điểm cong giữa
+      size.width, size.height - 35, // điểm kết thúc
+    );
+    path.lineTo(size.width, 0); // Đi lên lại
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
