@@ -2,7 +2,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as _client;
 
-import '../../domain/dtos/class_folder_dto.dart';
+import '../../domain/dtos/class_folder/assign_classroom_folder_request.dart';
+import '../../domain/dtos/class_folder/classroom_folder_dto.dart';
+import '../../domain/dtos/class_folder/get_all_folder_by_classroom_Id_respone.dart';
+import '../../domain/dtos/class_folder/remove_classroom_folder_request.dart';
+
 import '../../domain/models/base-reponse.dart';
 import '../../domain/models/session.dart';
 import 'BaseService.dart';
@@ -20,86 +24,165 @@ class ClassroomFolderService extends BaseService {
   }
 
   //--------- Assign Folder To ClassRoom ---------
-  Future<BaseResponse> assignFolderToClassRoom(AssignClassroomFolderRequest request) async {
-    try {
-      print('URL API: $url_api');
 
-      final response = await _client.post(
-        Uri.parse('$url_api/api/ClassroomFolder/assign'),
-        headers: _getHeaders(),
-        body: jsonEncode(request.toJson()),
+  Future<BaseResponse<Null>> assignFolderToClassRoom(AssignClassroomFolderRequest request) async {
+    final url = '$url_api/api/ClassroomFolder/assign';
+
+    final response = await _client.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}', // nếu cần
+      },
+      body: jsonEncode(request.toJson()),
+    );
+
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return BaseResponse<Null>.fromJson(
+        jsonData,
+            (data) => null,
       );
-
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      return BaseResponse.fromJson(jsonData);
-
-    } catch (e) {
-      print('Assign folder to classroom exception: $e');
-      return BaseResponse(
-        Success: false,
-        Message: 'Connection error: ${e.toString()}',
+    } else {
+      return BaseResponse<Null>(
+        success: false,
+        message: jsonData['message'] ?? 'Failed to assign folder to classroom',
+        data: null,
+        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
       );
     }
   }
 
   //--------- Get Folders For ClassRoom ---------
-  Future<BaseResponse> getFoldersForClassRoom(String classRoomId) async {
-    try {
-      final response = await _client.get(
-        Uri.parse('$url_api/api/ClassroomFolder/classroom/$classRoomId'),
-        headers: _getHeaders(),
+  Future<BaseResponse<List<ClassroomFolderDto>>> getFoldersForClassRoom(String classRoomId) async {
+    final url = '$url_api/api/ClassroomFolder/classroom/$classRoomId';
+
+    final response = await _client.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}', // nếu cần
+      },
+    );
+
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return BaseResponse<List<ClassroomFolderDto>>.fromJson(
+        jsonData,
+            (data) => (data as List<dynamic>)
+            .map((item) => ClassroomFolderDto.fromJson(item as Map<String, dynamic>))
+            .toList(),
       );
+    } else {
+      return BaseResponse<List<ClassroomFolderDto>>(
+        success: false,
+        message: jsonData['message'] ?? 'Failed to load folders for classroom',
+        data: null,
+        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
+      );
+    }
+  }
 
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      return BaseResponse.fromJson(jsonData);
+  Future<BaseResponse<List<GetAllFolderByClassroomIdRespone>>> getAllFolderByClassroomId(String classroomId) async {
+    final url = '$url_api/api/ClassroomFolder/GetAllFolderByClassroomId/$classroomId';
 
-    } catch (e) {
-      print('Get folders for classroom exception: $e');
-      return BaseResponse(
-        Success: false,
-        Message: 'Connection error: ${e.toString()}',
+    final response = await _client.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}', // nếu cần
+      },
+    );
+
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return BaseResponse<List<GetAllFolderByClassroomIdRespone>>.fromJson(
+        jsonData,
+            (data) => (data as List<dynamic>)
+            .map((item) => GetAllFolderByClassroomIdRespone.fromJson(item as Map<String, dynamic>))
+            .toList(),
+      );
+    } else {
+      return BaseResponse<List<GetAllFolderByClassroomIdRespone>>(
+        success: false,
+        message: jsonData['message'] ?? 'Failed to load folders by classroom ID',
+        data: null,
+        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
       );
     }
   }
 
   //--------- Get ClassRooms For Folder ---------
-  Future<BaseResponse> getClassRoomsForFolder(String folderId) async {
-    try {
-      final response = await _client.get(
-        Uri.parse('$url_api/api/ClassroomFolder/folder/$folderId'),
-        headers: _getHeaders(),
+  Future<BaseResponse<List<ClassroomFolderDto>>> getClassRoomsForFolder(String folderId) async {
+    final url = '$url_api/api/ClassroomFolder/folder/$folderId';
+
+    final response = await _client.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}', // nếu cần token
+      },
+    );
+
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return BaseResponse<List<ClassroomFolderDto>>.fromJson(
+        jsonData,
+            (data) => (data as List<dynamic>)
+            .map((item) => ClassroomFolderDto.fromJson(item as Map<String, dynamic>))
+            .toList(),
       );
-
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      return BaseResponse.fromJson(jsonData);
-
-    } catch (e) {
-      print('Get classrooms for folder exception: $e');
-      return BaseResponse(
-        Success: false,
-        Message: 'Connection error: ${e.toString()}',
+    } else {
+      return BaseResponse<List<ClassroomFolderDto>>(
+        success: false,
+        message: jsonData['message'] ?? 'Failed to load classrooms for folder',
+        data: null,
+        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
       );
     }
   }
+
 
   //--------- Remove Folder From ClassRoom ---------
-  Future<BaseResponse> removeFolderFromClassRoom(RemoveClassroomFolderRequest request) async {
-    try {
-      final response = await _client.delete(
-        Uri.parse('$url_api/api/ClassroomFolder/remove'),
-        headers: _getHeaders(),
-        body: jsonEncode(request.toJson()),
+  Future<BaseResponse<Null>> removeFolderFromClassRoom(RemoveClassroomFolderRequest request) async {
+    final url = '$url_api/api/ClassroomFolder/remove';
+
+    final requestBody = jsonEncode(request.toJson());
+
+    final response = await _client.delete(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}', // nếu cần token
+      },
+      body: jsonEncode(request.toJson()),
+    );
+
+
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return BaseResponse<Null>.fromJson(
+        jsonData,
+            (data) => null,
       );
-
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      return BaseResponse.fromJson(jsonData);
-
-    } catch (e) {
-      print('Remove folder from classroom exception: $e');
-      return BaseResponse(
-        Success: false,
-        Message: 'Connection error: ${e.toString()}',
+    } else {
+      return BaseResponse<Null>(
+        success: false,
+        message: jsonData['message'] ?? 'Failed to remove folder from classroom',
+        data: null,
+        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
       );
     }
   }
+
 }
