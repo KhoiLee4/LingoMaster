@@ -1,5 +1,4 @@
 import 'package:fluro/fluro.dart';
-import 'package:lingo_master/src/test/test_card_service.dart';
 import '../../src/ui/features/auth/auth_router.dart';
 import '../../src/ui/features/class/class_router.dart';
 import '../../src/ui/features/course/course_router.dart';
@@ -16,9 +15,6 @@ class AppRouter {
   static final Handler _splashHandler = Handler(
     handlerFunc: (context, parameters) => SplashProvider(),
   );
-  static final Handler _testCardService = Handler(
-    handlerFunc: (context, parameters) => SimpleApiTestPage(),
-  );
 
   static void setupRouter() {
     router.define(
@@ -26,14 +22,9 @@ class AppRouter {
       handler: _splashHandler,
       transitionType: TransitionType.inFromRight,
     );
-    router.define(
-      "/testCardService",
-      handler: _testCardService,
-      transitionType: TransitionType.inFromRight,
-    );
     AuthRouter.defineRoutes(router);
-    // HomeRouter.defineRoutes(router);
-    // LibraryRouter.defineRoutes(router);
+    HomeRouter.defineRoutes(router);
+    LibraryRouter.defineRoutes(router);
     ClassRouter.defineRoutes(router);
     FolderRouter.defineRoutes(router);
     CourseRouter.defineRoutes(router);

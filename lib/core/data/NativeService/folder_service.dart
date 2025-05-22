@@ -1,126 +1,143 @@
-// import 'dart:convert';
-//
-// import 'package:http/http.dart' as _client;
-//
-// import '../../domain/dtos/folder_dto.dart';
-// import '../../domain/models/base-reponse.dart';
-// import '../../domain/models/session.dart';
-// import 'BaseService.dart';
-//
-// class FolderService extends BaseService {
-//   FolderService() : super();
-//
-//   // Helper method to get authorization headers
-//   Map<String, String> _getHeaders() {
-//     return {
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json',
-//       if (Session.token != null) 'Authorization': 'Bearer ${Session.token}',
-//     };
-//   }
-//
-//   //--------- Get All Folders ---------
-//   Future<BaseResponse> getAllFolders({bool includeDeleted = false}) async {
-//     try {
-//       final response = await _client.get(
-//         Uri.parse('$url_api/api/Folder?includeDeleted=$includeDeleted'),
-//         headers: _getHeaders(),
-//       );
-//
-//       final Map<String, dynamic> jsonData = jsonDecode(response.body);
-//       return BaseResponse.fromJson(jsonData);
-//
-//     } catch (e) {
-//       print('Get all folders exception: $e');
-//       return BaseResponse(
-//         Success: false,
-//         Message: 'Connection error: ${e.toString()}',
-//
-//       );
-//     }
-//   }
-//
-//   //--------- Get Folder By Id ---------
-//   Future<BaseResponse> getFolderById(String id) async {
-//     try {
-//       final response = await _client.get(
-//         Uri.parse('$url_api/api/Folder/$id'),
-//         headers: _getHeaders(),
-//       );
-//
-//       final Map<String, dynamic> jsonData = jsonDecode(response.body);
-//       return BaseResponse.fromJson(jsonData);
-//
-//     } catch (e) {
-//       print('Get folder by id exception: $e');
-//       return BaseResponse(
-//         Success: false,
-//         Message: 'Connection error: ${e.toString()}',
-//       );
-//     }
-//   }
-//
-//   //--------- Create Folder ---------
-//   Future<BaseResponse> createFolder(CreateFolderDto createDto) async {
-//     try {
-//       print('URL API: $url_api');
-//
-//       final response = await _client.post(
-//         Uri.parse('$url_api/api/Folder'),
-//         headers: _getHeaders(),
-//         body: jsonEncode(createDto.toJson()),
-//       );
-//
-//       final Map<String, dynamic> jsonData = jsonDecode(response.body);
-//       return BaseResponse.fromJson(jsonData);
-//
-//     } catch (e) {
-//       print('Create folder exception: $e');
-//       return BaseResponse(
-//         Success: false,
-//         Message: 'Connection error: ${e.toString()}',
-//       );
-//     }
-//   }
-//
-//   //--------- Update Folder ---------
-//   Future<BaseResponse> updateFolder(UpdateFolderDto updateDto) async {
-//     try {
-//       final response = await _client.put(
-//         Uri.parse('$url_api/api/Folder/Update'),
-//         headers: _getHeaders(),
-//         body: jsonEncode(updateDto.toJson()),
-//       );
-//
-//       final Map<String, dynamic> jsonData = jsonDecode(response.body);
-//       return BaseResponse.fromJson(jsonData);
-//
-//     } catch (e) {
-//       print('Update folder exception: $e');
-//       return BaseResponse(
-//         Success: false,
-//         Message: 'Connection error: ${e.toString()}',
-//       );
-//     }
-//   }
-//
-//   //--------- Delete Folder ---------
-//   Future<BaseResponse> deleteFolder(String id) async {
-//     try {
-//       final response = await _client.delete(
-//         Uri.parse('$url_api/api/Folder/$id'),
-//         headers: _getHeaders(),
-//       );
-//
-//       final Map<String, dynamic> jsonData = jsonDecode(response.body);
-//       return BaseResponse.fromJson(jsonData);
-//
-//     } catch (e) {
-//       print('Delete folder exception: $e');
-//       return BaseResponse(
-//         Success: false,
-//         Message: 'Connection error: ${e.toString()}',
-//       );
-//     }
-//   }
-// }
+
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+import '../../domain/dtos/Folder/create_folder_dto.dart';
+import '../../domain/dtos/Folder/folder_dto.dart';
+import '../../domain/dtos/Folder/update_folder_dto.dart';
+import '../../domain/models/base-reponse.dart';
+
+class FolderService {
+  final String baseUrl = "http://bao10022004-001-site1.qtempurl.com/api/folder";
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    // Thêm token authorization nếu cần
+  };
+
+  // GET: api/folder - Lấy tất cả các folder
+  Future<BaseResponse<List<FolderDto>>> getAllFoldersAsync({bool includeDeleted = false}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl?includeDeleted=$includeDeleted'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<List<FolderDto>>.fromJson(
+        jsonResponse,
+            (data) => (data as List)
+            .map((item) => FolderDto.fromJson(item as Map<String, dynamic>))
+            .toList(),
+      );
+    } else {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<List<FolderDto>>(
+        success: false,
+        message: 'Failed to load folders. Status code: ${response.statusCode}',
+        errors: ['Error: ${jsonResponse['message'] ?? 'Unknown error'}'],
+      );
+    }
+  }
+
+  // GET: api/folder/{id} - Lấy folder theo ID
+  Future<BaseResponse<FolderDto>> getFolderByIdAsync(String id) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/$id'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<FolderDto>.fromJson(
+        jsonResponse,
+            (data) => FolderDto.fromJson(data as Map<String, dynamic>),
+      );
+    } else {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<FolderDto>(
+        success: false,
+        message: 'Failed to load folder. Status code: ${response.statusCode}',
+        errors: ['Error: ${jsonResponse['message'] ?? 'Unknown error'}'],
+      );
+    }
+  }
+
+  // POST: api/folder - Tạo folder mới
+  Future<BaseResponse<CreateFolderDto>> createFolderAsync(CreateFolderDto createDto) async {
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: headers,
+      body: json.encode(createDto.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<CreateFolderDto>.fromJson(
+        jsonResponse,
+            (data) => CreateFolderDto.fromJson(data as Map<String, dynamic>),
+      );
+    } else {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<CreateFolderDto>(
+        success: false,
+        message: 'Failed to create folder. Status code: ${response.statusCode}',
+        errors: jsonResponse['errors'] != null
+            ? List<String>.from(jsonResponse['errors'])
+            : ['Unknown error'],
+      );
+    }
+  }
+
+  // PUT: api/folder/Update - Cập nhật folder
+  Future<BaseResponse<UpdateFolderDto>> updateFolderAsync(UpdateFolderDto updateDto) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/Update'),
+      headers: headers,
+      body: json.encode(updateDto.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<UpdateFolderDto>.fromJson(
+        jsonResponse,
+            (data) => UpdateFolderDto.fromJson(data as Map<String, dynamic>),
+      );
+    } else {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<UpdateFolderDto>(
+        success: false,
+        message: 'Failed to update folder. Status code: ${response.statusCode}',
+        errors: jsonResponse['errors'] != null
+            ? List<String>.from(jsonResponse['errors'])
+            : ['Unknown error'],
+      );
+    }
+  }
+
+  // DELETE: api/folder/{id} - Xóa folder
+  Future<BaseResponse<void>> deleteFolderAsync(String id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/$id'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<void>(
+        success: jsonResponse['success'] ?? false,
+        message: jsonResponse['message'] ?? 'Folder deleted successfully',
+      );
+    } else {
+      final jsonResponse = json.decode(response.body);
+      return BaseResponse<void>(
+        success: false,
+        message: 'Failed to delete folder. Status code: ${response.statusCode}',
+        errors: jsonResponse['errors'] != null
+            ? List<String>.from(jsonResponse['errors'])
+            : ['Unknown error'],
+      );
+    }
+  }
+}
