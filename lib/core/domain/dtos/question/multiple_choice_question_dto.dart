@@ -1,20 +1,18 @@
-class MultipleChoiceQuestionDto {
-  final String question;
-  final List<String> choices;
-  final String answer;
+class MultipleChoiceQuestion {
+  String question;
+  List<String> choices;
+  String answer;
 
-  MultipleChoiceQuestionDto({
+  MultipleChoiceQuestion({
     required this.question,
     required this.choices,
     required this.answer,
   });
 
-  factory MultipleChoiceQuestionDto.fromJson(Map<String, dynamic> json) {
-    return MultipleChoiceQuestionDto(
+  factory MultipleChoiceQuestion.fromJson(Map<String, dynamic> json) {
+    return MultipleChoiceQuestion(
       question: json['question'] ?? '',
-      choices: json['choices'] != null
-          ? List<String>.from(json['choices'])
-          : [],
+      choices: List<String>.from(json['choices'] ?? []),
       answer: json['answer'] ?? '',
     );
   }

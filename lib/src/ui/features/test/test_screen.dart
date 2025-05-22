@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/data/NativeService/folder_service.dart';
 import '../../../../core/data/NativeService/folder_user_service.dart';
-import '../../../../core/domain/dtos/folder_dto.dart';
-import '../../../../core/domain/dtos/folder_user_dto.dart';
 
 class TesttScreen extends StatefulWidget {
   const TesttScreen({super.key});

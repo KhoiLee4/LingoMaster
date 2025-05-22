@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/domain/dtos/class_dto.dart';
+import '../../../../../../core/domain/dtos/classroom/classroom_dto.dart';
 import '../../../../../../widgets/class_item.dart';
 
 class ClassTab extends StatelessWidget {
@@ -7,22 +7,34 @@ class ClassTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ClassRoomDto> classItems = [
       ClassRoomDto(
-        className: 'tét',
+        name: 'Lớp học',
         classCode: '0 học phần',
-        id: '',
-        description: '',
-        createdBy: '',
+        id: 'class',
+        description: 'Mô tả lớp học',
+        isDelete: false,
+        isPublic: true,
         createdAt: DateTime.now(),
-        isDeleted: true,
+        updatedAt: DateTime.now(),
       ),
       ClassRoomDto(
-        className: 'lớp toeic',
+        name: 'Lớp học',
         classCode: '0 học phần',
-        id: '',
-        description: '',
-        createdBy: '',
+        id: 'class',
+        description: 'Mô tả lớp học',
+        isDelete: false,
+        isPublic: true,
         createdAt: DateTime.now(),
-        isDeleted: true,
+        updatedAt: DateTime.now(),
+      ),
+      ClassRoomDto(
+        name: 'Lớp học',
+        classCode: '0 học phần',
+        id: 'class',
+        description: 'Mô tả lớp học',
+        isDelete: false,
+        isPublic: true,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
     ];
 
@@ -32,7 +44,10 @@ class ClassTab extends StatelessWidget {
         padding: EdgeInsets.all(16),
         itemCount: classItems.length,
         itemBuilder: (context, index) {
-          return ClassItem(item: classItems[index], hasIcon: true,);
+          return ClassItem(
+            item: classItems[index],
+            hasIcon: true,
+          );
         },
       ),
     );

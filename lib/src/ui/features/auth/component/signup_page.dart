@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lingo_master/core/data/NativeService/AccountService.dart';
-import 'package:lingo_master/core/domain/dtos/register_user_dto.dart';
 import 'package:lingo_master/core/domain/models/session.dart';
 import 'package:lingo_master/src/ui/features/auth/bloc/signup/signup_bloc.dart';
 import 'package:lingo_master/src/ui/features/auth/bloc/signup/sigup_state.dart';
+import '../../../../../core/domain/dtos/account/register_user_dto.dart';
 import '../../../../../core/navigation/routers.dart';
 import '../bloc/signup/signup_event.dart';
 
@@ -48,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
       return;
     }
-    
+
     // call
     var req = RegisterUserDto(
       email: email,
@@ -113,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // First Name field
                   TextField(
                     controller: _firstName,
@@ -131,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Last Name field
                   TextField(
                     controller: _lastName,

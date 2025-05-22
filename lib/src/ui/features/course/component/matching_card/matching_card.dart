@@ -271,7 +271,7 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
             size: 30,
           ),
           onPressed: () {
-            // Xử lý khi nhấn nút đóng
+            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
           },
         ),
         title: Text(

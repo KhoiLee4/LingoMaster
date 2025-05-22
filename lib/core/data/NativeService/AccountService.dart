@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as _client;
 import 'package:lingo_master/core/data/NativeService/BaseService.dart';
-import 'package:lingo_master/core/domain/dtos/register_user_dto.dart';
 import 'package:lingo_master/core/domain/models/session.dart';
 
+import '../../domain/dtos/account/register_user_dto.dart';
 import '../../domain/models/basereponse.dart';
 
 class AccountService extends BaseService {

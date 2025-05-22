@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/domain/dtos/class_dto.dart';
+import '../core/domain/dtos/classroom/classroom_dto.dart';
 import '../core/navigation/routers.dart';
 
 class ClassItem extends StatelessWidget {
@@ -43,7 +43,7 @@ class ClassItem extends StatelessWidget {
                 ),
               SizedBox(width: 16),
               Text(
-                item.className,
+                item.name,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

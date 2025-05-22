@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lingo_master/src/test/test_card_service.dart';
+import 'package:lingo_master/src/test/test_card_user_service.dart';
 import 'core/navigation/routers.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -16,6 +18,9 @@ void main() {
 
   AppRouter.setupRouter();
   runApp(MyApp());
+  // runApp(MaterialApp(
+  //   home: SimpleApiTestPage(),
+  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRouter.router.generator,
       initialRoute: '/',
+
       // theme: ThemeData(
       //   textTheme: appTextTheme,
       // ),

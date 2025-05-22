@@ -74,7 +74,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     }
   }
 
- 
+
 
   @override
   void dispose() {
@@ -126,7 +126,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
-            
+
             // 6 ô nhập OTP
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -172,9 +172,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -187,7 +187,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 child: const Text('Xác minh', style: TextStyle(fontSize: 16)),
               ),
             ),
-            
+
             TextButton(
               onPressed: () {
                 AppRouter.router.navigateTo(context, "/signin", replace: true);
