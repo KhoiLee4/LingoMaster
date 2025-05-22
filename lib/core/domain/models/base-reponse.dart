@@ -1,31 +1,22 @@
-class BaseResponse {
-  bool Success;
-  String Message;
-  dynamic Data;
-  List<String>? Errors;
+class BaseResponse<T> {
+  bool success;
+  String message;
+  T? data;
+  List<String>? errors;
 
-  BaseResponse({
-    this.Success = false,
-    this.Message = '',
-    this.Data,
-    this.Errors,
-  });
+  BaseResponse({required this.success, required this.message, this.data, this.errors});
 
-  // Phương thức fromJson để tạo đối tượng từ Map
-  factory BaseResponse.fromJson(Map<String, dynamic> json) {
-    // Xử lý trường errors
-    List<String>? errorsList;
-    if (json['errors'] != null) {
-      if (json['errors'] is List) {
-        errorsList = (json['errors'] as List).map((e) => e.toString()).toList();
-      }
-    }
-
-    return BaseResponse(
-      Success: json['success'] ?? false,
-      Message: json['message'] ?? '',
-      Data: json['data'],
-      Errors: errorsList,
+  factory BaseResponse.fromJson(
+      Map<String, dynamic> json,
+      T Function(Object? json) fromJsonT,
+      ) {
+    return BaseResponse<T>(
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      data: json['data'] != null ? fromJsonT(json['data']) : null,
+      errors: json['errors'] != null
+          ? List<String>.from(json['errors'])
+          : null,
     );
   }
 }

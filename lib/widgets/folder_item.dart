@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/domain/dtos/folder_dto.dart';
+import '../core/domain/dtos/Folder/folder_dto.dart';
 import '../core/navigation/routers.dart';
 
 class FolderItem extends StatelessWidget {
@@ -70,7 +70,7 @@ class FolderItem extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    item.userId.toString(),
+                    item.id.toString(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

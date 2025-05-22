@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as _client;
 import 'package:lingo_master/core/data/NativeService/BaseService.dart';
 import 'package:lingo_master/core/domain/dtos/register_user_dto.dart';
-import 'package:lingo_master/core/domain/models/base-reponse.dart';
 import 'package:lingo_master/core/domain/models/session.dart';
+
+import '../../domain/models/basereponse.dart';
 
 class AccountService extends BaseService {
   AccountService() : super();
@@ -12,7 +13,7 @@ class AccountService extends BaseService {
   Future<BaseResponse> login(String email, String password) async {
     try {
       print('URL API: $url_api');
-      
+
       final response = await _client.post(
         Uri.parse(url_api + '/api/Account/Login'),
         headers: {
@@ -23,12 +24,12 @@ class AccountService extends BaseService {
           'password': password,
         }),
       );
-      
+
           final Map<String, dynamic> jsonData = jsonDecode(response.body);
           Session.token = jsonData['token'];
           Session.user = jsonData['user'];
           return BaseResponse.fromJson(jsonData);
-    
+
     } catch (e) {
       print('Login exception: $e');
       return BaseResponse(
@@ -62,7 +63,7 @@ class AccountService extends BaseService {
   }
 // Example of how you would use the token for subsequent calls
 
-  //--------- Tạo tài khoản --------- 
+  //--------- Tạo tài khoản ---------
   Future<BaseResponse> createAccount
     (
       RegisterUserDto reg
@@ -78,7 +79,7 @@ class AccountService extends BaseService {
         );
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
         return BaseResponse.fromJson(jsonData);
-       
+
       } catch (e) {
         return BaseResponse(
           Success: false,

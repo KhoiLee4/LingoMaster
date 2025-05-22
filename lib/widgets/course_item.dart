@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/domain/dtos/set_dto.dart';
+import '../core/domain/dtos/set/set_dto.dart';
 import '../core/navigation/routers.dart';
 
 class CourseItem extends StatelessWidget {
@@ -44,7 +44,7 @@ class CourseItem extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                '${item.cardCount} thuật ngữ',
+                ' thuật ngữ',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],

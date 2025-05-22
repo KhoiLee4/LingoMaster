@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
                     });
                   },
                   children: [
-                    HomeScreen(),
+                    HomeProvider(),
                     Center(
                         child: Text('Lời giải',
                             style: TextStyle(color: Colors.white))),

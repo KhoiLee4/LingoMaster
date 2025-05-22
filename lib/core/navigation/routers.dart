@@ -8,6 +8,7 @@ import '../../src/ui/features/library/library_router.dart';
 import '../../src/ui/features/profile/profile_router.dart';
 import '../../src/ui/features/setting/setting_router.dart';
 import '../../src/ui/features/splash/component/splash_page.dart';
+import '../../src/ui/features/test/test_screen.dart';
 
 class AppRouter {
   static final FluroRouter router = FluroRouter();
@@ -16,10 +17,19 @@ class AppRouter {
     handlerFunc: (context, parameters) => SplashProvider(),
   );
 
+  static final Handler _testtHandler = Handler(
+    handlerFunc: (context, parameters) => TesttScreen(),
+  );
+
   static void setupRouter() {
     router.define(
       "/",
       handler: _splashHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/testt",
+      handler: _testtHandler,
       transitionType: TransitionType.inFromRight,
     );
     AuthRouter.defineRoutes(router);

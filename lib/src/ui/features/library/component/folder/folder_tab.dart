@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/domain/dtos/folder_dto.dart';
+import '../../../../../../core/domain/dtos/Folder/folder_dto.dart';
 import '../../../../../../widgets/folder_item.dart';
 
 class FolderTab extends StatelessWidget {
@@ -9,13 +9,24 @@ class FolderTab extends StatelessWidget {
     final List<FolderDto> folderItems = [
       FolderDto(
         name: 'test',
-        description: 'KhoiLee04',
         id: '',
+        isDeleted: false,
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
       ),
       FolderDto(
-        name: 'kkkkk',
-        description: 'KhoiLee04',
+        name: 'test',
         id: '',
+        isDeleted: false,
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
+      ),
+      FolderDto(
+        name: 'test',
+        id: '',
+        isDeleted: false,
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
       ),
     ];
 
@@ -25,7 +36,7 @@ class FolderTab extends StatelessWidget {
         padding: EdgeInsets.all(16),
         itemCount: folderItems.length,
         itemBuilder: (context, index) {
-            return FolderItem(item: folderItems[index]);
+          return FolderItem(item: folderItems[index]);
         },
       ),
     );

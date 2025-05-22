@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/domain/dtos/set_dto.dart';
-import '../../../../../../widgets/course_item.dart';
 
+import '../../../../../../core/domain/dtos/set/set_dto.dart';
+import '../../../../../../widgets/course_item.dart';
 
 class CourseTab extends StatelessWidget {
   final String selectedFilter;
@@ -12,28 +12,25 @@ class CourseTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<SetDto> libraryItems = [
       SetDto(
-        name: 'ETS RC2 test 2',
-        cardCount: 95,
-        id: '',
-        topicId: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        name: 'ETS RC2 test',
+        id: 'course',
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
+        idTopic: 'topic',
       ),
       SetDto(
-        name: 'TOEIC Vocabulary',
-        cardCount: 120,
-        id: '',
-        topicId: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        name: 'ETS RC2 test',
+        id: 'course',
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
+        idTopic: 'topic',
       ),
       SetDto(
-        name: 'Business English',
-        cardCount: 80,
-        id: '',
-        topicId: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        name: 'ETS RC2 test',
+        id: 'course',
+        createAt: DateTime.now(),
+        updateAt: DateTime.now(),
+        idTopic: 'topic',
       ),
     ];
 
