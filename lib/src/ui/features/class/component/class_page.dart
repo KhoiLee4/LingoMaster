@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/design_systems/theme/app_colors.dart';
+
 class ClassScreen extends StatefulWidget {
   const ClassScreen({Key? key}) : super(key: key);
 
@@ -35,7 +37,9 @@ class _ClassScreenState extends State<ClassScreen> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
+        backgroundColor: AppColors.primaryWhite,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black87),
           onPressed: () => Navigator.pop(context),

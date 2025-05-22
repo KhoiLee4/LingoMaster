@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/design_systems/theme/app_colors.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -314,26 +317,6 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
             const SizedBox(height: 40),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.check_box_outline_blank),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new),
-              onPressed: () {},
-            ),
           ],
         ),
       ),

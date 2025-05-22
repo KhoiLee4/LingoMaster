@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/design_systems/theme/app_colors.dart';
 import '../../../../../core/navigation/routers.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -28,7 +29,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
+        backgroundColor: AppColors.primaryWhite,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 28),
           onPressed: () {
