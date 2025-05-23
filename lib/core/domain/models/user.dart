@@ -24,6 +24,7 @@ class User{
   String? ProfilePicture;
 
   User({
+    required this.Id,
     required this.FirstName,
     required this.LastName,
     required this.Email,
