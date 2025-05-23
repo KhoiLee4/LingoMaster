@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:lingo_master/core/data/NativeService/card_user_service.dart';
 
 import '../../../../../../core/data/NativeService/card_service.dart';
 import 'course_event.dart';

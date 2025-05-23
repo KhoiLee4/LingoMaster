@@ -148,7 +148,9 @@ class _StudyState extends State<Study> {
                       children: [
                         IconButton(
                           icon: Icon(Icons.close, size: 32, color: Colors.grey[600]),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            AppRouter.router.navigateTo(context, "/studySetting", replace: true);
+                          },
                         ),
                         IconButton(
                           icon: Icon(Icons.settings, size: 32, color: Colors.grey[600]),

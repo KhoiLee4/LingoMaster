@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 
 import '../../../../../core/design_systems/theme/app_colors.dart';
 
@@ -98,20 +99,16 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   _buildSettingsItem(
                     title: 'Tên người dùng',
-                    subtitle: 'KNgao1',
+                    subtitle: Session.user?.username,
                     onTap: () {},
                   ),
                   const Divider(height: 1),
                   _buildSettingsItem(
                     title: 'Email',
-                    subtitle: 'aotuong1390@gmail.com',
+                    subtitle: Session.user?.Email ,
                     onTap: () {},
                   ),
-                  const Divider(height: 1),
-                  _buildSettingsItem(
-                    title: 'Tạo mật khẩu',
-                    onTap: () {},
-                  ),
+                 
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 
 import '../../../../../core/navigation/routers.dart';
 
@@ -52,9 +53,9 @@ class ProfileScreen extends StatelessWidget {
                       NetworkImage('https://via.placeholder.com/80'),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'KhoiLee04',
-                  style: TextStyle(
+                Text(
+                  Session.user!.username ?? "Account Name",
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
