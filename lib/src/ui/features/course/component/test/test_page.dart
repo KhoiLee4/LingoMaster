@@ -64,7 +64,7 @@ class _TestScreenState extends State<TestScreen> {
           icon: const Icon(Icons.close, color: Colors.black54),
           onPressed: () {
             // Handle closing the quiz
-            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+            AppRouter.router.navigateTo(context, "/home", replace: true);
           },
         ),
         // title: Text(

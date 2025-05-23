@@ -5,6 +5,7 @@ import 'package:http/http.dart' as _client;
 
 
 
+
 import '../../domain/dtos/classroom/classroom_dto.dart';
 import '../../domain/dtos/classroom/create_classroom_dto.dart';
 import '../../domain/dtos/classroom/update_classroom.dart';
@@ -82,7 +83,7 @@ class ClassRoomService extends BaseService {
   }
 
   // Tạo lớp học mới
-  Future<BaseResponse<String>> createClassRoom(CreateClassRoomDto createDto) async {
+  Future<BaseResponse<ClassRoomDto>> createClassRoom(CreateClassRoomDto createDto) async {
     final url = '$url_api/api/ClassRoom';
 
     final response = await _client.post(
@@ -97,13 +98,13 @@ class ClassRoomService extends BaseService {
 
     final Map<String, dynamic> jsonData = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      return BaseResponse<String>.fromJson(
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return BaseResponse<ClassRoomDto>.fromJson(
         jsonData,
-            (data) => data as String,
+            (dataJson) => ClassRoomDto.fromJson(dataJson as Map<String, dynamic>),
       );
     } else {
-      return BaseResponse<String>(
+      return BaseResponse<ClassRoomDto>(
         success: false,
         message: jsonData['message'] ?? 'Failed to create classroom',
         data: null,

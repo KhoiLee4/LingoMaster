@@ -4,6 +4,8 @@ import 'package:lingo_master/src/ui/features/home/component/home_page.dart';
 import 'package:lingo_master/src/ui/features/library/component/library_page.dart';
 import 'package:lingo_master/src/ui/features/profile/component/proflie_page.dart';
 
+import '../../../../../core/navigation/routers.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -67,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColors.primaryWhite,
         currentIndex: _currentIndex,
         onTap: (index) {
           if (index == 2) {
@@ -155,6 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () {
                             Navigator.pop(context);
                             // Navigate to create study set
+                            AppRouter.router.navigateTo(context, "/addCourse", replace: false);
                           },
                         ),
 
@@ -166,6 +170,7 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () {
                             Navigator.pop(context);
                             // Navigate to create folder
+                            AppRouter.router.navigateTo(context, "/addFolder", replace: false);
                           },
                         ),
 
@@ -177,6 +182,7 @@ class _MainScreenState extends State<MainScreen> {
                           onTap: () {
                             Navigator.pop(context);
                             // Navigate to create class
+                            AppRouter.router.navigateTo(context, "/addClass", replace: false);
                           },
                         ),
                       ],

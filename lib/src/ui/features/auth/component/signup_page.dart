@@ -264,26 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
           );
         }),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_box_outline_blank),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back_ios_new),
-            label: '',
-          ),
-        ],
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.black45,
-        unselectedItemColor: Colors.black45,
-      ),
+
     );
   }
 }
