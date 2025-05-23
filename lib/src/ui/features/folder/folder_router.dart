@@ -3,7 +3,10 @@ import 'component/folder_page.dart';
 
 class FolderRouter {
   static final Handler _mainfolderHandler = Handler(
-    handlerFunc: (context, parameters) => FolderScreen(),
+    handlerFunc: (context, parameters) {
+      final id = parameters['id']?.first;
+      return FolderScreen(id: id);
+    },
   );
 
   // static final Handler _achievementsHandler = Handler(
@@ -24,7 +27,7 @@ class FolderRouter {
 
   static void defineRoutes(FluroRouter router) {
     router.define(
-      "/folderpage",
+      "/folderpage/:id",
       handler: _mainfolderHandler,
       transitionType: TransitionType.inFromRight,
     );
