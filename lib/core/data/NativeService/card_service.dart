@@ -144,4 +144,32 @@ class CardService extends BaseService {
       );
     }
   }
+  //
+  Future<BaseResponse<List<CardDto>>> getCardBySetId(String setId) async {
+    final response = await _client.get(
+      Uri.parse('$url_api/api/Card/getCardBySetId/$setId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Session.token}',
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+      return BaseResponse<List<CardDto>>.fromJson(
+          jsonData,
+              (data) => (data as List<dynamic>)
+              .map((item) => CardDto.fromJson(item as Map<String, dynamic>))
+              .toList());
+    } else {
+      final Map<String, dynamic> jsonData = jsonDecode(response.body);
+      return BaseResponse<List<CardDto>>(
+        success: false,
+        message: 'Failed to load card, status code: ${response.statusCode}',
+        data: null,
+        errors: jsonData["message"],
+      );
+    }
+  }
 }

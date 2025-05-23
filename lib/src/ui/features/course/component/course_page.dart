@@ -2,47 +2,50 @@ import 'dart:ui';
 
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+import 'package:lingo_master/core/domain/dtos/Card/card_dto.dart';
+import 'package:lingo_master/src/ui/features/course/bloc/course_bloc/course_event.dart';
 
+import '../../../../../core/data/NativeService/card_service.dart';
 import '../../../../../core/navigation/routers.dart';
+import '../bloc/course_bloc/course_bloc.dart';
+import '../bloc/course_bloc/course_state.dart';
+
+class CourseProvider extends StatelessWidget {
+  final String? id;
+  const CourseProvider({super.key, this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<CourseBloc>(
+      create: (context) {
+        final bloc = CourseBloc(CardService(), id!);
+        // Trigger loading folders immediately after creating the bloc
+        bloc.add(LoadCard());
+        return bloc;
+      },
+      child: CourseScreen(id: id,),
+    );
+  }
+}
 
 class CourseScreen extends StatefulWidget {
-  const CourseScreen({super.key});
+  final String? id;
+
+  const CourseScreen({super.key, this.id});
 
   @override
   State<CourseScreen> createState() => _CourseScreenState();
 }
 
 class _CourseScreenState extends State<CourseScreen> {
-  final PageController _pageController = PageController();
-  int currentIndex = 0;
   bool _showOptionsMenu = false;
-
-  final List<WordCard> vocabulary = [
-    WordCard("employee", "(n) nhân viên"),
-    WordCard("except", "(prep., conj) trừ ra, không kể, trừ phi"),
-    WordCard("organize", "(v) tổ chức, sắp xếp"),
-    WordCard("benefit", "(n) lợi ích; (v) được lợi"),
-    WordCard("contract", "(n) hợp đồng; (v) ký kết"),
-  ];
 
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() {
-      int next = _pageController.page!.round();
-      if (currentIndex != next) {
-        setState(() {
-          currentIndex = next;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
+    // print("ID nhận được: ${widget.id}");
   }
 
   void _toggleOptionsMenu() {
@@ -92,64 +95,19 @@ class _CourseScreenState extends State<CourseScreen> {
             child: Column(
               children: [
                 // Flash Card Section with PageView for horizontal swipe
-                Container(
-                  height: 250,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: vocabulary.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryWhite,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.neutralGray600,
-                              blurRadius: 5,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Text(
-                                vocabulary[index].term,
-                                style: TextStyle(
-                                  fontSize: 36,
-                                  color: AppColors.neutralGray700,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 10,
-                              bottom: 10,
-                              child: Icon(
-                                Icons.fullscreen,
-                                color: AppColors.neutralGray600,
-                                size: 36,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                FlashCardSection(),
 
                 // Dynamic Dots Indicator
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < vocabulary.length; i++)
-                        buildDotIndicator(i),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   margin: EdgeInsets.symmetric(vertical: 16),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       for (int i = 0; i < 10; i++)
+                //         buildDotIndicator(i),
+                //     ],
+                //   ),
+                // ),
 
                 // Upgrade Button
                 Container(
@@ -245,13 +203,13 @@ class _CourseScreenState extends State<CourseScreen> {
                 ),
                 // Action Buttons
                 buildActionButton("assets/images/course/Card.png",
-                    "Thẻ ghi nhớ", Colors.blue, "/memoryCard"),
+                    "Thẻ ghi nhớ", Colors.blue, "/memoryCard/${widget.id}"),
                 buildActionButton(
-                    "assets/images/course/study.png", "Học", Colors.blue, "/study"),
+                    "assets/images/course/study.png", "Học", Colors.blue, "/study/${widget.id}"),
                 buildActionButton(
-                    "assets/images/course/Test.png", "Kiểm tra", Colors.blue, "/testSetting"),
+                    "assets/images/course/Test.png", "Kiểm tra", Colors.blue, "/testSetting/${widget.id}"),
                 buildActionButton("assets/images/course/graft_card.png",
-                    "Ghép thẻ", Colors.blue, "/matchingCardReady"),
+                    "Ghép thẻ", Colors.blue, "/matchingCardReady/${widget.id}"),
                 buildActionButton(
                     "assets/images/course/blast.png", "Blast", Colors.blue, ""),
                 buildActionButton(
@@ -292,36 +250,14 @@ class _CourseScreenState extends State<CourseScreen> {
                           ],
                         ),
                       ),
-                      ...vocabulary.map((word) => buildWordItem(word)).toList(),
+                      WordItem(),
                     ],
                   ),
                 ),
 
-                // Learn Button
-                Container(
-                  // color: AppColors.primaryBlue,
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        "Học bộ học phần này",
-                        style: TextStyle(
-                            fontSize: 16, color: AppColors.primaryWhite),
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
 
-                SizedBox(height: 16),
+
+                // SizedBox(height: 16),
               ],
             ),
           ),
@@ -443,6 +379,29 @@ class _CourseScreenState extends State<CourseScreen> {
             ),
         ],
       ),
+      bottomNavigationBar: // Learn Button
+      Container(
+        // color: AppColors.primaryBlue,
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "Học bộ học phần này",
+              style: TextStyle(
+                  fontSize: 16, color: AppColors.primaryWhite),
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryBlue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -475,33 +434,33 @@ class _CourseScreenState extends State<CourseScreen> {
 
   }
 
-  Widget buildDotIndicator(int index) {
-    // Calculate dot size based on position
-    double size;
-    if (index == currentIndex) {
-      // Current dot is larger and blue
-      size = 10;
-    } else if (index == 0 || index == vocabulary.length - 1) {
-      // First and last dots are smaller when not active
-      size = (currentIndex == index) ? 10 : 6;
-    } else {
-      // Middle dots are medium size
-      size = 8;
-    }
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      width: size,
-      height: size,
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: index == currentIndex
-            ? AppColors.primaryBlue
-            : AppColors.neutralGray700,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
+  // Widget buildDotIndicator(int index) {
+  //   // Calculate dot size based on position
+  //   double size;
+  //   if (index == currentIndex) {
+  //     // Current dot is larger and blue
+  //     size = 10;
+  //   } else if (index == 0 || index == vocabulary.length - 1) {
+  //     // First and last dots are smaller when not active
+  //     size = (currentIndex == index) ? 10 : 6;
+  //   } else {
+  //     // Middle dots are medium size
+  //     size = 8;
+  //   }
+  //
+  //   return AnimatedContainer(
+  //     duration: Duration(milliseconds: 200),
+  //     width: size,
+  //     height: size,
+  //     margin: EdgeInsets.symmetric(horizontal: 4),
+  //     decoration: BoxDecoration(
+  //       color: index == currentIndex
+  //           ? AppColors.primaryBlue
+  //           : AppColors.neutralGray700,
+  //       shape: BoxShape.circle,
+  //     ),
+  //   );
+  // }
 
   Widget buildActionButton(String image, String text, Color color, String link) {
     return Container(
@@ -546,7 +505,201 @@ class _CourseScreenState extends State<CourseScreen> {
     );
   }
 
-  Widget buildWordItem(WordCard word) {
+
+}
+
+class FlashCardSection extends StatefulWidget {
+  const FlashCardSection({super.key});
+
+  @override
+  State<FlashCardSection> createState() => _FlashCardSectionState();
+}
+
+class _FlashCardSectionState extends State<FlashCardSection> {
+  final PageController _pageController = PageController();
+  int currentIndex = 0;
+
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      int next = _pageController.page!.round();
+      if (currentIndex != next) {
+        setState(() {
+          currentIndex = next;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CourseBloc, CourseState>(
+      builder: (context, state) {
+        if (state is CourseLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CourseLoaded) {
+          if (state.cards == null) {
+            return const Center(
+              child: Text(
+                'Chưa có thẻ nào',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+          return Container(
+            height: 250,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: state.cards?.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin:
+                  EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryWhite,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.neutralGray600,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Text(
+                          state.cards![index].key,
+                          style: TextStyle(
+                            fontSize: 36,
+                            color: AppColors.neutralGray700,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 10,
+                        bottom: 10,
+                        child: Icon(
+                          Icons.fullscreen,
+                          color: AppColors.neutralGray600,
+                          size: 36,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        } else if (state is CourseError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CourseBloc>().add(LoadCard());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<CourseBloc>().add(LoadCard());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+
+  }
+}
+
+class WordCard {
+  final String term;
+  final String definition;
+
+  WordCard(this.term, this.definition);
+}
+
+class WordItem extends StatelessWidget {
+  const WordItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CourseBloc, CourseState>(
+      builder: (context, state) {
+        if (state is CourseLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CourseLoaded) {
+          if (state.cards == null) {
+            return const Center(
+              child: Text(
+                'Chưa có thẻ nào',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: state.cards?.length ?? 0,
+            itemBuilder: (context, index) {
+              return buildWordItem(state.cards![index]);
+            },
+          );
+
+        } else if (state is CourseError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CourseBloc>().add(LoadCard());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<CourseBloc>().add(LoadCard());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+
+
+  }
+  Widget buildWordItem(CardDto card) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Container(
@@ -570,7 +723,7 @@ class _CourseScreenState extends State<CourseScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    word.term,
+                    card.key,
                     style: TextStyle(
                         fontSize: 16,
                         // fontWeight: FontWeight.w500,
@@ -593,7 +746,7 @@ class _CourseScreenState extends State<CourseScreen> {
                 ],
               ),
               Text(
-                word.definition,
+                card.value,
                 style: TextStyle(
                   color: AppColors.neutralGray900,
                   fontSize: 16,
@@ -607,9 +760,3 @@ class _CourseScreenState extends State<CourseScreen> {
   }
 }
 
-class WordCard {
-  final String term;
-  final String definition;
-
-  WordCard(this.term, this.definition);
-}

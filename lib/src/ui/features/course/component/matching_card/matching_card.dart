@@ -3,12 +3,36 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+import 'package:lingo_master/src/ui/features/course/bloc/course_bloc/course_event.dart';
 
+import '../../../../../../core/data/NativeService/card_service.dart';
 import '../../../../../../core/navigation/routers.dart';
+import '../../bloc/course_bloc/course_bloc.dart';
+import '../../bloc/course_bloc/course_state.dart';
+
+class MatchingCardProvider extends StatelessWidget {
+  final String? id;
+  const MatchingCardProvider({super.key, this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<CourseBloc>(
+      create: (context) {
+        final bloc = CourseBloc(CardService(), id!);
+        // Trigger loading folders immediately after creating the bloc
+        bloc.add(LoadCard());
+        return bloc;
+      },
+      child: MatchingCardScreen(id: id,),
+    );
+  }
+}
 
 class MatchingCardScreen extends StatefulWidget {
-  const MatchingCardScreen({super.key});
+  final String? id;
+  const MatchingCardScreen({super.key, this.id});
 
   @override
   State<MatchingCardScreen> createState() => _MatchingCardState();
@@ -22,16 +46,67 @@ class WordPair {
 }
 
 class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderStateMixin  {
-  // Danh sách các cặp từ vựng
-  final List<WordPair> _pairs = [
-    WordPair(word: 'perishable', translation: 'dễ hư hỏng'),
-    WordPair(word: 'earn', translation: 'kiếm được'),
-    WordPair(word: '(v) chuyển về, chuyển môn hoá', translation: 'specialize'),
-    WordPair(word: 'automobile', translation: 'xe ô tô'),
-    WordPair(word: 'regulation', translation: '(n) quy định, quy tắc, điều lệ (v) điều khiển, điều tiết'),
-    WordPair(word: 'design', translation: 'thiết kế'),
-  ];
+  // Thời gian còn lại (đổi thành 120 giây = 2 phút)
+  double _remainingTime = 120.0;
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F9),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            color: Color(0xFF465060),
+            size: 30,
+          ),
+          onPressed: () {
+            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+          },
+        ),
+        title: Text(
+          '${_remainingTime.toStringAsFixed(1)} giây',
+          style: const TextStyle(
+            color: Color(0xFF465060),
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.volume_up,
+              color: Color(0xFF465060),
+            ),
+            onPressed: () {
+              // Xử lý khi nhấn nút âm thanh
+            },
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              color: Color(0xFF465060),
+            ),
+            onPressed: () {
+              // Xử lý khi nhấn nút cài đặt
+            },
+          ),
+        ],
+      ),
+      body: Maching(),
+    );
+  }
+}
+class Maching extends StatefulWidget {
+  const Maching({super.key});
+
+  @override
+  State<Maching> createState() => _MachingState();
+}
+
+class _MachingState extends State<Maching> with TickerProviderStateMixin {
   // Danh sách các thẻ được hiển thị
   List<String> _cards = [];
   // Thẻ đang được chọn
@@ -52,13 +127,12 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
   int _matchedPairs = 0;
   // Controller cho animation lắc
   late final List<AnimationController> _shakeControllers = [];
+  // Lưu trữ danh sách cặp từ từ bloc
+  List<dynamic> _pairs = [];
 
   @override
   void initState() {
     super.initState();
-    _initializeGame();
-    _startTimer();
-
     // Khởi tạo animation controllers cho mỗi thẻ
     for (int i = 0; i < 12; i++) {
       _shakeControllers.add(AnimationController(
@@ -78,12 +152,18 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
     super.dispose();
   }
 
-  void _initializeGame() {
+  void _initializeGame(List<dynamic> cards) {
+    final random = Random();
+
+    // Chọn ngẫu nhiên 6 cặp từ danh sách ban đầu
+    cards.shuffle(random); // Xáo trộn toàn bộ danh sách ban đầu
+    _pairs = cards.take(6).toList(); // Lấy 6 cặp đầu tiên
+
     // Tạo danh sách các thẻ (từ và dịch)
     List<String> allItems = [];
-    for (var pair in _pairs) {
-      allItems.add(pair.word);
-      allItems.add(pair.translation);
+    for (var card in _pairs) {
+      allItems.add(card.key); // word
+      allItems.add(card.value); // translation
     }
 
     // Xáo trộn danh sách
@@ -100,6 +180,7 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
   }
 
   void _startTimer() {
+    _timer?.cancel(); // Hủy timer cũ nếu có
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         if (_remainingTime > 0) {
@@ -130,7 +211,7 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
                 _matchedPairs = 0;
                 _selectedIndex = null;
                 _previousIndex = null;
-                _initializeGame();
+                _initializeGame(_pairs);
                 _startTimer();
               });
             },
@@ -154,9 +235,12 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
     String item1 = _cards[index1];
     String item2 = _cards[index2];
 
-    for (var pair in _pairs) {
-      if ((pair.word == item1 && pair.translation == item2) ||
-          (pair.word == item2 && pair.translation == item1)) {
+    for (var card in _pairs) {
+      String word = card.key;
+      String translation = card.value;
+
+      if ((word == item1 && translation == item2) ||
+          (word == item2 && translation == item1)) {
         return true;
       }
     }
@@ -235,6 +319,7 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
     });
   }
 
+
   void _showCompletionDialog() {
     showDialog(
       context: context,
@@ -256,126 +341,149 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F9),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.close,
-            color: Color(0xFF465060),
-            size: 30,
-          ),
-          onPressed: () {
-            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
-          },
-        ),
-        title: Text(
-          '${_remainingTime.toStringAsFixed(1)} giây',
-          style: const TextStyle(
-            color: Color(0xFF465060),
-            fontSize: 24,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.volume_up,
-              color: Color(0xFF465060),
-            ),
-            onPressed: () {
-              // Xử lý khi nhấn nút âm thanh
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.settings,
-              color: Color(0xFF465060),
-            ),
-            onPressed: () {
-              // Xử lý khi nhấn nút cài đặt
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    if (index < _cards.length) {
-                      // Kiểm tra xem thẻ có nên hiển thị không
-                      if (_cardVisibility[index] == false) {
-                        // Thẻ đã bị ẩn (ghép đúng)
-                        return const SizedBox.shrink(); // Không chiếm chỗ
-                      }
+    return BlocBuilder<CourseBloc, CourseState>(
+      builder: (context, state) {
+        if (state is CourseLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CourseLoaded) {
+          if (state.cards == null || state.cards!.isEmpty) {
+            return const Center(
+              child: Text(
+                'Chưa có thẻ nào',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
 
-                      return AnimatedBuilder(
-                        animation: _shakeControllers[index],
-                        builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(
-                              sin(_shakeControllers[index].value * 4 * pi) * 10,
-                              0,
-                            ),
-                            child: child,
-                          );
-                        },
-                        child: GestureDetector(
-                          onTap: () => _selectCard(index),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            decoration: BoxDecoration(
-                              color: _cardColors[index],
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1,
+          // Khởi tạo game khi có dữ liệu từ bloc
+          if (_cards.isEmpty) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _initializeGame(state.cards!);
+              _startTimer();
+            });
+          }
+
+          return SafeArea(
+            child: Column(
+              children: [
+                // Hiển thị thời gian còn lại
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Thời gian: ${_remainingTime.toStringAsFixed(1)}s',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Cặp đã ghép: $_matchedPairs/${_pairs.length}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemCount: _cards.length,
+                      itemBuilder: (context, index) {
+                        // Kiểm tra xem thẻ có nên hiển thị không
+                        if (_cardVisibility[index] == false) {
+                          // Thẻ đã bị ẩn (ghép đúng)
+                          return const SizedBox.shrink(); // Không chiếm chỗ
+                        }
+
+                        return AnimatedBuilder(
+                          animation: _shakeControllers[index],
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(
+                                sin(_shakeControllers[index].value * 4 * pi) * 10,
+                                0,
                               ),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  _cards[index],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: _cardColors[index] == Colors.white ?
-                                    Colors.black : Colors.white,
+                              child: child,
+                            );
+                          },
+                          child: GestureDetector(
+                            onTap: () => _selectCard(index),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              decoration: BoxDecoration(
+                                color: _cardColors[index],
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    _cards[index],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: _cardColors[index] == Colors.white ?
+                                      Colors.black : Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          );
+        } else if (state is CourseError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CourseBloc>().add(LoadCard());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<CourseBloc>().add(LoadCard());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }

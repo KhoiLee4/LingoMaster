@@ -26,7 +26,7 @@ class CourseItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/coursepage");
+          AppRouter.router.navigateTo(context, "/coursepage/15E8C7A0-103B-47F7-6559-08DD975190C2");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
