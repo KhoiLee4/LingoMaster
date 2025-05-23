@@ -6,7 +6,8 @@ import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import '../../../../../../core/navigation/routers.dart';
 
 class MatchingCardReady extends StatelessWidget {
-  const MatchingCardReady({super.key});
+  final String? id;
+  const MatchingCardReady({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class MatchingCardReady extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Xử lý khi nhấn nút bắt đầu chơi
-                  AppRouter.router.navigateTo(context, "/matchingCard", replace: true);
+                  AppRouter.router.navigateTo(context, "/matchingCard/$id", replace: true);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryBlue,
