@@ -58,7 +58,7 @@ class FlashCard extends StatefulWidget {
 }
 
 class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
-  int currentIndex = 2; // Starting at 39/95 (0-indexed)
+  int currentIndex = 0; // Starting at 39/95 (0-indexed)
   int numCardMemory = 0;
   int numCardForgot = 0;
 

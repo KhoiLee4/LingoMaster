@@ -131,7 +131,7 @@ class ChallengeScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          time,
+                          time.toString().substring(0, 2),
                           style: const TextStyle(
                             fontSize: 16,
                           ),

@@ -64,7 +64,14 @@ class CourseRouter {
     },
   );
   static final Handler _TestSuccessHandler = Handler(
-    handlerFunc: (context, parameters) => TestSuccess(),
+    handlerFunc: (context, parameters) { 
+      final numberRightQuestion = parameters['numberRightQuestion']?.first;
+      final numberWrongQuestion = parameters['numberWrongQuestion']?.first;
+      return TestSuccess(
+        numberRightQuestion: int.parse(numberRightQuestion!),
+        numberWrongQuestion: int.parse(numberWrongQuestion!),
+      );
+    },
   );
   static final Handler _MatchingCardReadyHandler = Handler(
     handlerFunc: (context, parameters) {
@@ -131,7 +138,7 @@ class CourseRouter {
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/testSuccess",
+      "/testSuccess/:id/:numberRightQuestion/:numberWrongQuestion",
       handler: _TestSuccessHandler,
       transitionType: TransitionType.inFromRight,
     );

@@ -4,8 +4,10 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:lingo_master/core/data/NativeService/set_service.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import 'package:lingo_master/core/domain/dtos/Card/card_dto.dart';
+import 'package:lingo_master/core/domain/dtos/set/set_dto.dart';
 import 'package:lingo_master/core/domain/models/session.dart';
 import 'package:lingo_master/src/ui/features/course/bloc/course_bloc/course_event.dart';
 
@@ -44,20 +46,38 @@ class CourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<CourseScreen> {
   bool _showOptionsMenu = false;
   int lenght =0;
+  final String? id;
+  String? name;
+  _CourseScreenState({this.id}) : super();
+  
   @override
   void initState() {
+     loadName();
     super.initState();
+         
     // print("ID nhận được: ${widget.id}");
   }
 
   void _toggleOptionsMenu() {
     setState(() {
       _showOptionsMenu = !_showOptionsMenu;
+
     });
   }
-
+  void loadName () async
+  {
+    final course =await new SetService().getSetById(id!);
+    if (course != null && course.data != null) {
+      setState(() {
+        name = course.data?.name;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
+
+     loadName();
+
     return Scaffold(
       backgroundColor: AppColors.backgroundDefault,
       appBar: AppBar(
@@ -164,13 +184,7 @@ class _CourseScreenState extends State<CourseScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "ETS RC2 test 2",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      
                       SizedBox(height: 10),
                       Row(
                         children: [

@@ -22,11 +22,10 @@ class WellComeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _buildTermsText(),
               const SizedBox(height: 30),
-              _buildGoogleLoginButton(),
+              _buildGoogleLoginButton(context ),
               const SizedBox(height: 16),
               _buildEmailLoginButton(context),
               const SizedBox(height: 16),
-              _buildLoginLink(context),
             ],
           ),
         ),
@@ -84,26 +83,24 @@ class WellComeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGoogleLoginButton() {
+  Widget _buildGoogleLoginButton(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
       width: double.infinity,
       height: 70,
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          AppRouter.router.navigateTo(context, "/signin", replace: true);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryBlue,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        icon: FaIcon(
-          FontAwesomeIcons.google,
-          color: AppColors.primaryWhite,
-          size: 20,
-        ),
+        
         label: Text(
-          'Tiếp tục với Google',
+          'Đăng nhập',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
@@ -149,31 +146,4 @@ class WellComeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginLink(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          'Đã có tài khoản? ',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            AppRouter.router.navigateTo(context, "/signin", replace: true);
-          },
-          child: Text(
-            'Đăng nhập',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryBlue,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
