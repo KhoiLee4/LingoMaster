@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../../core/design_systems/theme/app_colors.dart';
 
 class ClassScreen extends StatefulWidget {
-  const ClassScreen({Key? key}) : super(key: key);
+  final String? id;
+
+  const ClassScreen({super.key, required this.id});
 
   @override
   State<ClassScreen> createState() => _ClassScreenState();

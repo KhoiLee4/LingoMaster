@@ -1,25 +1,23 @@
+
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as client;
 
 import '../../domain/dtos/set/create_set_dto.dart';
 import '../../domain/dtos/set/set_dto.dart';
 import '../../domain/dtos/set/update_set_dto.dart';
 import '../../domain/models/base-reponse.dart';
+import 'BaseService.dart';
 
-class SetService {
-  final String baseUrl;
-  final http.Client httpClient;
+class SetService extends BaseService {
 
-  SetService({
-    required this.baseUrl,
-    http.Client? httpClient,
-  }) : httpClient = httpClient ?? http.Client();
+  SetService({bool ignoreSSLCertificate = false})
+      : super(ignoreSSLCertificate: ignoreSSLCertificate);
 
   /// Dispose method để cleanup resources
-  void dispose() {
-    httpClient.close();
-  }
+  // void dispose() {
+  //   _client.close();
+  // }
 
   /// Headers mặc định cho các request
   Map<String, String> get _defaultHeaders => {
@@ -30,8 +28,8 @@ class SetService {
   /// GET: api/set - Lấy tất cả sets
   Future<BaseResponse<List<SetDto>>> getAllSets() async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/set'),
+      final response = await client.get(
+        Uri.parse('$url_api/api/set'),
         headers: _defaultHeaders,
       );
 
@@ -67,8 +65,8 @@ class SetService {
   /// GET: api/set/{id} - Lấy set theo ID
   Future<BaseResponse<SetDto>> getSetById(String id) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/set/$id'),
+      final response = await client.get(
+        Uri.parse('$url_api/api/set/$id'),
         headers: _defaultHeaders,
       );
 
@@ -99,8 +97,8 @@ class SetService {
   /// GET: api/set/topic/{topicId} - Lấy sets theo Topic ID
   Future<BaseResponse<List<SetDto>>> getSetsByTopicId(String topicId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/set/topic/$topicId'),
+      final response = await client.get(
+        Uri.parse('$url_api/api/set/topic/$topicId'),
         headers: _defaultHeaders,
       );
 
@@ -136,8 +134,8 @@ class SetService {
   /// POST: api/set - Tạo set mới
   Future<BaseResponse<CreateSetDto>> createSet(CreateSetDto createSetDto) async {
     try {
-      final response = await httpClient.post(
-        Uri.parse('$baseUrl/api/set'),
+      final response = await client.post(
+        Uri.parse('$url_api/api/set'),
         headers: _defaultHeaders,
         body: json.encode(createSetDto.toJson()),
       );
@@ -169,8 +167,8 @@ class SetService {
   /// PUT: api/set/Update - Cập nhật set
   Future<BaseResponse<UpdateSetDto>> updateSet(UpdateSetDto updateSetDto) async {
     try {
-      final response = await httpClient.put(
-        Uri.parse('$baseUrl/api/set/Update'),
+      final response = await client.put(
+        Uri.parse('$url_api/api/set/Update'),
         headers: _defaultHeaders,
         body: json.encode(updateSetDto.toJson()),
       );
@@ -202,8 +200,8 @@ class SetService {
   /// DELETE: api/set/{id} - Xóa set
   Future<BaseResponse<void>> deleteSet(String id) async {
     try {
-      final response = await httpClient.delete(
-        Uri.parse('$baseUrl/api/set/$id'),
+      final response = await client.delete(
+        Uri.parse('$url_api/api/set/$id'),
         headers: _defaultHeaders,
       );
 

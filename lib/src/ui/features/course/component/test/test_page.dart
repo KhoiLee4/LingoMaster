@@ -6,9 +6,11 @@ import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 
 import '../../../../../../core/data/NativeService/card_service.dart';
 import '../../../../../../core/data/NativeService/question_service.dart';
+import '../../../../../../core/domain/dtos/question/multiple_choice_question_dto.dart';
 import '../../../../../../core/navigation/routers.dart';
 import '../../bloc/question_bloc/question_bloc.dart';
 import '../../bloc/question_bloc/question_event.dart';
+import '../../bloc/question_bloc/question_state.dart';
 
 class TestProvider extends StatelessWidget {
   final String? id;
@@ -36,17 +38,17 @@ class TestScreen extends StatefulWidget {
   State<TestScreen> createState() => _TestScreenState();
 }
 
-class QuizQuestion {
-  final String term;
-  final List<String> options;
-  final int correctAnswerIndex;
-
-  QuizQuestion({
-    required this.term,
-    required this.options,
-    required this.correctAnswerIndex,
-  });
-}
+// class QuizQuestion {
+//   final String term;
+//   final List<String> options;
+//   final int correctAnswerIndex;
+//
+//   QuizQuestion({
+//     required this.term,
+//     required this.options,
+//     required this.correctAnswerIndex,
+//   });
+// }
 
 
 class _TestScreenState extends State<TestScreen> {
@@ -90,31 +92,31 @@ class _TestState extends State<Test> {
   bool hasAnswered = false;
 
   // Initialize questions list at declaration
-  late final List<QuizQuestion> questions;
+  late List<MultipleChoiceQuestion> questions = [];
 
 
   @override
   void initState() {
     super.initState();
     // Initialize questions in initState
-    questions = [
-      QuizQuestion(
-        term: "báo chí",
-        options: ["rely on", "press", "respect", "extra"],
-        correctAnswerIndex: 1, // "press" is the correct answer
-      ),
-      QuizQuestion(
-        term: "tin tức",
-        options: ["news", "respect", "depend", "question"],
-        correctAnswerIndex: 0,
-      ),
-      // Add more questions as needed
-      QuizQuestion(
-        term: "kính trọng",
-        options: ["extra", "press", "respect", "rely on"],
-        correctAnswerIndex: 2,
-      ),
-    ];
+    // questions = [
+    //   QuizQuestion(
+    //     term: "báo chí",
+    //     options: ["rely on", "press", "respect", "extra"],
+    //     correctAnswerIndex: 1, // "press" is the correct answer
+    //   ),
+    //   QuizQuestion(
+    //     term: "tin tức",
+    //     options: ["news", "respect", "depend", "question"],
+    //     correctAnswerIndex: 0,
+    //   ),
+    //   // Add more questions as needed
+    //   QuizQuestion(
+    //     term: "kính trọng",
+    //     options: ["extra", "press", "respect", "rely on"],
+    //     correctAnswerIndex: 2,
+    //   ),
+    // ];
   }
 
   void _selectAnswer(int index) {
@@ -130,107 +132,164 @@ class _TestState extends State<Test> {
   }
 
   void _nextQuestion() {
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        selectedAnswerIndex = null;
-        hasAnswered = false;
+    if (currentQuestionIndex >= questions.length - 1) {
+      // Delay một chút để người dùng thấy feedback của câu cuối
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          AppRouter.router.navigateTo(context, "/testSuccess", replace: true);
+        }
       });
+      return;
     }
+
+    // Nếu chưa phải câu hỏi cuối, chuyển sang câu tiếp theo
+    setState(() {
+      currentQuestionIndex++;
+      selectedAnswerIndex = null;
+      hasAnswered = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Ensure we have valid questions and index
-    if (questions.isEmpty) {
-      return const Scaffold(
-        body: Center(child: Text("No questions available")),
-      );
-    }
-
-    // Safety check to prevent index out of range errors
-    if (currentQuestionIndex >= questions.length) {
-      currentQuestionIndex = questions.length - 1;
-    }
-
-    final currentQuestion = questions[currentQuestionIndex];
-
-    if (currentQuestionIndex >= questions.length) {
-      _showCompletionDialog();
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // const Divider(height: 1, color: Colors.grey),
-        // Progress bar with scores
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          // Progress bar in the middle
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Stack(
-                children: [
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: (currentQuestionIndex + 1) / questions.length,
-                    child: Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Colors.green[300],
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                  ),
-                ],
+    return BlocBuilder<QuestionBloc, QuestionState>(
+      builder: (context, state) {
+        if (state is QuestionLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is QuestionLoaded) {
+          if (state.questions == null) {
+            return const Center(
+              child: Text(
+                'Chưa có câu hỏi nào',
+                style: TextStyle(color: Colors.grey),
               ),
+            );
+          }
+          questions = state.questions!;
+          // Ensure we have valid questions and index
+          if (questions.isEmpty) {
+            return const Scaffold(
+              body: Center(child: Text("No questions available")),
+            );
+          }
+
+          // Safety check to prevent index out of range errors
+          if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = questions.length - 1;
+          }
+
+          final currentQuestion = questions[currentQuestionIndex];
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // const Divider(height: 1, color: Colors.grey),
+              // Progress bar with scores
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                // Progress bar in the middle
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        FractionallySizedBox(
+                          widthFactor: (currentQuestionIndex + 1) / questions
+                              .length,
+                          child: Container(
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: Colors.green[300],
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  currentQuestion.question,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "Chọn câu trả lời",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blueGrey[700],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: currentQuestion.choices.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _buildOptionCard(
+                          currentQuestion.choices[index], index),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+
+        }
+
+        else if (state is QuestionError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<QuestionBloc>().add(LoadQuestion());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
             ),
-          ),
-        ),
-        const SizedBox(height: 40),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            currentQuestion.term,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(height: 40),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            "Chọn câu trả lời",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.blueGrey[700],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: currentQuestion.options.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildOptionCard(currentQuestion.options[index], index),
-              );
-            },
-          ),
-        ),
-      ],
+          );
+        }
+
+        else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<QuestionBloc>().add(LoadQuestion());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      }
+
     );
+
 
   }
   Widget _buildOptionCard(String option, int index) {
@@ -257,24 +316,24 @@ class _TestState extends State<Test> {
       ),
     );
   }
-  void _showCompletionDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Chúc mừng!'),
-        content: const Text('Bạn đã hoàn thành.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Ở đây có thể thêm logic chuyển sang màn hình tiếp theo
-              AppRouter.router.navigateTo(context, "/coursePage/${widget.id}", replace: true);
-            },
-            child: const Text('Tiếp tục'),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showCompletionDialog() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) => AlertDialog(
+  //       title: const Text('Chúc mừng!'),
+  //       content: const Text('Bạn đã hoàn thành.'),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //             // Ở đây có thể thêm logic chuyển sang màn hình tiếp theo
+  //             AppRouter.router.navigateTo(context, "/coursePage/${widget.id}", replace: true);
+  //           },
+  //           child: const Text('Tiếp tục'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

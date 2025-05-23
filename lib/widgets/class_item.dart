@@ -27,7 +27,7 @@ class ClassItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/classpage");
+          AppRouter.router.navigateTo(context, "/classpage/${item.id}");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
