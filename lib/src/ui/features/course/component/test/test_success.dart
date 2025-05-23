@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/navigation/routers.dart';
 
 class TestSuccess extends StatefulWidget {
-  const TestSuccess({super.key});
+
+  int? numberRightQuestion;
+  int? numberWrongQuestion;
+  TestSuccess({super.key, this.numberRightQuestion, this.numberWrongQuestion});
 
   @override
-  State<TestSuccess> createState() => _TestSuccessState();
+  State<TestSuccess> createState() => _TestSuccessState(
+    numberRightQuestion: numberRightQuestion,
+    numberWrongQuestion: numberWrongQuestion,
+  );
 }
 
 class _TestSuccessState extends State<TestSuccess> {
+  int? numberRightQuestion;
+  int? numberWrongQuestion;
+  _TestSuccessState({this.numberRightQuestion, this.numberWrongQuestion});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,10 +234,10 @@ class _TestSuccessState extends State<TestSuccess> {
                                   ),
                                 ),
                               ),
-                              const Center(
+                              Center(
                                 child: Text(
-                                  '33%',
-                                  style: TextStyle(
+                                  '${((numberRightQuestion! *100) /( numberWrongQuestion!+numberRightQuestion!) ).toStringAsFixed(2)}%',
+                                  style: const TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF4A5568),
@@ -261,10 +271,10 @@ class _TestSuccessState extends State<TestSuccess> {
                                       color: const Color(0xFFE6FFFA),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        '1',
-                                        style: TextStyle(
+                                        '${numberRightQuestion!}',
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xFF00A693),
@@ -292,10 +302,10 @@ class _TestSuccessState extends State<TestSuccess> {
                                       color: const Color(0xFFFFF2E6),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        '2',
-                                        style: TextStyle(
+                                        "${numberWrongQuestion!}",
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xFFFF9500),
@@ -326,37 +336,7 @@ class _TestSuccessState extends State<TestSuccess> {
                     const SizedBox(height: 20),
 
                     // New Quiz Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Handle new quiz
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4F46E5),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.lock_outline, size: 20),
-                            SizedBox(width: 8),
-                            Text(
-                              'Làm bài kiểm tra mới',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    
 
                     const SizedBox(height: 16),
 
@@ -366,7 +346,7 @@ class _TestSuccessState extends State<TestSuccess> {
                       height: 60,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Handle review flashcards
+                          AppRouter.router.navigateTo(context, "/home");
                         },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF4A5568),
@@ -388,7 +368,7 @@ class _TestSuccessState extends State<TestSuccess> {
                             ),
                             const SizedBox(width: 8),
                             const Text(
-                              'Xem lại thẻ ghi nhớ',
+                              'Trở lại',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

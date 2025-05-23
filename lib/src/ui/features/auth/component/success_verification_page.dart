@@ -36,7 +36,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       var req = await new AccountService().verify(_otpCode);
       if(req.Success == true) {
         // Nếu xác minh thành công, điều hướng đến trang chính
-        AppRouter.router.navigateTo(context, "/home", replace: true);
+        AppRouter.router.navigateTo(context, "/signin", replace: true);
       } else {
         // Nếu xác minh thất bại, hiển thị thông báo lỗi
         ScaffoldMessenger.of(context).showSnackBar(
