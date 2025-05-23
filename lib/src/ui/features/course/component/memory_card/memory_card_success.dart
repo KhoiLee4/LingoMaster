@@ -4,15 +4,15 @@ import '../../../../../../core/navigation/routers.dart';
 
 class MemoryCardSuccess extends StatelessWidget {
   final int totalQuestions;
-  final int correctAnswers;
-  final int wrongAnswers;
-  final int skippedAnswers;
+  int correctAnswers;
+  int wrongAnswers;
+  int skippedAnswers;
 
-  const MemoryCardSuccess({
+   MemoryCardSuccess({
     Key? key,
-    this.totalQuestions = 18,
-    this.correctAnswers = 18,
-    this.wrongAnswers = 0,
+      required this.totalQuestions,
+    required this.correctAnswers,
+    required this.wrongAnswers,
     this.skippedAnswers = 0,
   }) : super(key: key);
 

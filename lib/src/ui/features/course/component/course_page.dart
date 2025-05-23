@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import 'package:lingo_master/core/domain/dtos/Card/card_dto.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 import 'package:lingo_master/src/ui/features/course/bloc/course_bloc/course_event.dart';
 
 import '../../../../../core/data/NativeService/card_service.dart';
@@ -41,7 +43,7 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen> {
   bool _showOptionsMenu = false;
-
+  int lenght =0;
   @override
   void initState() {
     super.initState();
@@ -180,22 +182,14 @@ class _CourseScreenState extends State<CourseScreen> {
                           ),
                           SizedBox(width: 8),
                           Text(
-                            "KhoiLee04",
+                            Session.user!.username ?? "Account",
                             style: TextStyle(
                               fontSize: 16,
                               color: AppColors.neutralGray500,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 16),
-                          Text(
-                            "95 thuật ngữ",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.neutralGray900,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          
                         ],
                       ),
                     ],
@@ -659,6 +653,8 @@ class WordItem extends StatelessWidget {
               ),
             );
           }
+          
+          var length = state.cards!.length ?? 0;
           return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -734,7 +730,19 @@ class WordItem extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.volume_up,
                             color: AppColors.neutralGray700),
-                        onPressed: () {},
+                        onPressed: () {
+                        
+                          var  tts =  FlutterTts();
+                            tts.setLanguage("en-US");
+                            tts.setPitch(1.0);
+                            tts.setSpeechRate(0.5);
+                            tts.setVolume(1.0);
+                            tts.speak(card.key.toString());
+
+                                                    
+
+                                                      
+                        },
                       ),
                       IconButton(
                         icon: Icon(Icons.star_border,

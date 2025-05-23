@@ -2,19 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 
 import '../../../../../../core/navigation/routers.dart';
 
 class MatchingCardResult extends StatefulWidget {
-  const MatchingCardResult({super.key});
+  final String time;
+   MatchingCardResult({super.key, required this.time});
 
   @override
-  State<MatchingCardResult> createState() => _MatchingCardResultState();
+  State<MatchingCardResult> createState() => _MatchingCardResultState(time: time);
 }
 
 class _MatchingCardResultState extends State<MatchingCardResult> {
   bool showChallengeScreen = true;
-
+  String time;
+  _MatchingCardResultState({required this.time});
   void toggleScreen() {
     setState(() {
       showChallengeScreen = !showChallengeScreen;
@@ -55,15 +58,15 @@ class _MatchingCardResultState extends State<MatchingCardResult> {
           ),
         ],
       ),
-      body: showChallengeScreen ? ChallengeScreen(onTap: toggleScreen) : ResultScreen(onTap: toggleScreen),
+      body: showChallengeScreen ? ChallengeScreen(onTap: toggleScreen, time: time) : ResultScreen(onTap: toggleScreen, time: time,),
     );
   }
 }
 
 class ChallengeScreen extends StatelessWidget {
   final VoidCallback onTap;
-
-  const ChallengeScreen({Key? key, required this.onTap}) : super(key: key);
+  final String time;
+  const ChallengeScreen({Key? key, required this.onTap, required this.time}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +83,9 @@ class ChallengeScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const Text(
-                  '36,3 giây',
-                  style: TextStyle(
+                Text(
+                  time,
+                  style: const TextStyle(
                     fontSize: 38,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF333333),
@@ -120,16 +123,16 @@ class ChallengeScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'KhoiLee04',
-                          style: TextStyle(
+                        Text(
+                          Session.user!.username ?? '',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          '36,3 giây',
-                          style: TextStyle(
+                        Text(
+                          time,
+                          style: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
@@ -243,8 +246,8 @@ class ChallengeScreen extends StatelessWidget {
 }
 class ResultScreen extends StatelessWidget {
   final VoidCallback onTap;
-
-  const ResultScreen({Key? key, required this.onTap}) : super(key: key);
+  final String time;
+  const ResultScreen({Key? key, required this.onTap,required this.time }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -270,9 +273,9 @@ class ResultScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  '36,3 giây',
-                  style: TextStyle(
+                Text(
+                  time,
+                  style: const TextStyle(
                     fontSize: 38,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF333333),
@@ -322,9 +325,9 @@ class ResultScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 15),
-                        const Text(
-                          '36,3 giây',
-                          style: TextStyle(
+                        Text(
+                          time,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -337,9 +340,9 @@ class ResultScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          'KhoiLee04',
-                          style: TextStyle(
+                        Text(
+                          Session.user!.username ?? '',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),

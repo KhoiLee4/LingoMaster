@@ -1,3 +1,5 @@
+import 'package:lingo_master/core/domain/dtos/card_user/update_card_status_request.dart';
+
 import '../../../../../../core/domain/dtos/Card/card_dto.dart';
 
 abstract class CourseState {}
@@ -11,4 +13,8 @@ class CourseLoaded extends CourseState {
 class CourseError extends CourseState {
   final String message;
   CourseError(this.message);
+}
+class CardUpdate extends CourseState {
+  final UpdateCardStatusRequest card;
+  CardUpdate(this.card);
 }
