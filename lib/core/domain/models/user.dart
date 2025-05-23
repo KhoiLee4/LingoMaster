@@ -45,6 +45,6 @@ class User{
     required this.TwoFactorEnabled,
     required this.LockoutEnd,
     required this.AccessFailedCount,
-    this.ProfilePicture
+    this.ProfilePicture, required Id
   });
 }

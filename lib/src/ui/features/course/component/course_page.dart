@@ -7,7 +7,9 @@ import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import '../../../../../core/navigation/routers.dart';
 
 class CourseScreen extends StatefulWidget {
-  const CourseScreen({super.key});
+  final String? id;
+
+  const CourseScreen({super.key, this.id});
 
   @override
   State<CourseScreen> createState() => _CourseScreenState();
@@ -246,16 +248,16 @@ class _CourseScreenState extends State<CourseScreen> {
                 // Action Buttons
                 buildActionButton("assets/images/course/Card.png",
                     "Thẻ ghi nhớ", Colors.blue, "/memoryCard"),
-                buildActionButton(
-                    "assets/images/course/study.png", "Học", Colors.blue, "/study"),
-                buildActionButton(
-                    "assets/images/course/Test.png", "Kiểm tra", Colors.blue, "/testSetting"),
+                buildActionButton("assets/images/course/study.png", "Học",
+                    Colors.blue, "/study"),
+                buildActionButton("assets/images/course/Test.png", "Kiểm tra",
+                    Colors.blue, "/testSetting"),
                 buildActionButton("assets/images/course/graft_card.png",
                     "Ghép thẻ", Colors.blue, "/matchingCardReady"),
                 buildActionButton(
                     "assets/images/course/blast.png", "Blast", Colors.blue, ""),
-                buildActionButton(
-                    "assets/images/course/block.png", "Khối hộp", Colors.blue, ""),
+                buildActionButton("assets/images/course/block.png", "Khối hộp",
+                    Colors.blue, ""),
 
                 SizedBox(
                   height: 12,
@@ -470,9 +472,7 @@ class _CourseScreenState extends State<CourseScreen> {
       ),
       dense: true,
       onTap: onTap,
-
     );
-
   }
 
   Widget buildDotIndicator(int index) {
@@ -503,7 +503,8 @@ class _CourseScreenState extends State<CourseScreen> {
     );
   }
 
-  Widget buildActionButton(String image, String text, Color color, String link) {
+  Widget buildActionButton(
+      String image, String text, Color color, String link) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       height: 60,

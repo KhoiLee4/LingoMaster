@@ -12,7 +12,10 @@ import 'component/test/test_setting.dart';
 
 class CourseRouter {
   static final Handler _maincourseHandler = Handler(
-    handlerFunc: (context, parameters) => CourseScreen(),
+    handlerFunc: (context, parameters) {
+      final id = parameters['id']?.first;
+      return CourseScreen(id: id);
+    },
   );
   static final Handler _memoryCardHandler = Handler(
     handlerFunc: (context, parameters) => MemoryCardScreen(),
@@ -42,18 +45,17 @@ class CourseRouter {
     handlerFunc: (context, parameters) => MatchingCardSetting(),
   );
 
-
   static void defineRoutes(FluroRouter router) {
     router.define(
-      "/coursepage",
+      "/coursepage/:id",
       handler: _maincourseHandler,
       transitionType: TransitionType.inFromRight,
     );
-      router.define(
-        "/memoryCard",
-        handler: _memoryCardHandler,
-        transitionType: TransitionType.inFromRight,
-      );
+    router.define(
+      "/memoryCard",
+      handler: _memoryCardHandler,
+      transitionType: TransitionType.inFromRight,
+    );
     router.define(
       "/study",
       handler: _studyHandler,

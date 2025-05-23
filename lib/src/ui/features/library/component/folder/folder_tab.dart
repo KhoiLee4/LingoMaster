@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/domain/dtos/Folder/folder_dto.dart';
+import '../../../../../../core/domain/dtos/folder_user/get_all_folder_by_user.dart';
 import '../../../../../../widgets/folder_item.dart';
 
 class FolderTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<FolderDto> folderItems = [
-      FolderDto(
-        name: 'test',
-        id: '',
-        isDeleted: false,
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
+    final List<GetAllFolderByUserIdResponse> folderItems = [
+      GetAllFolderByUserIdResponse(
+        folderId: '',
+        folderName: '',
+        nameUser: '',
       ),
-      FolderDto(
-        name: 'test',
-        id: '',
-        isDeleted: false,
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
+      GetAllFolderByUserIdResponse(
+        folderId: '',
+        folderName: '',
+        nameUser: '',
       ),
-      FolderDto(
-        name: 'test',
-        id: '',
-        isDeleted: false,
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
+      GetAllFolderByUserIdResponse(
+        folderId: '',
+        folderName: '',
+        nameUser: '',
+      ),
+      GetAllFolderByUserIdResponse(
+        folderId: '',
+        folderName: '',
+        nameUser: '',
       ),
     ];
 

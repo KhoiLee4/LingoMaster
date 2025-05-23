@@ -1,6 +1,7 @@
+
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as _client;
 
 import '../../domain/dtos/set_user/assign_set_user_request.dart';
 import '../../domain/dtos/set_user/created_set_dto.dart';
@@ -8,32 +9,28 @@ import '../../domain/dtos/set_user/remove_set_user_request.dart';
 import '../../domain/dtos/set_user/set_user_dto.dart';
 import '../../domain/dtos/set_user/update_access_date_request.dart';
 import '../../domain/models/base-reponse.dart';
+import 'BaseService.dart';
 
-class SetUserService {
-  final String baseUrl;
-  final http.Client httpClient;
+class SetUserService extends BaseService {
+  SetUserService({bool ignoreSSLCertificate = false})
+      : super(ignoreSSLCertificate: ignoreSSLCertificate);
 
-  SetUserService({
-    required this.baseUrl,
-    http.Client? httpClient,
-  }) : httpClient = httpClient ?? http.Client();
+  /// Dispose method to cleanup resources
+  // void dispose() {
+  //   _client.close();
+  // }
 
-  /// Dispose method để cleanup resources
-  void dispose() {
-    httpClient.close();
-  }
-
-  /// Headers mặc định cho các request
+  /// Headers for requests
   Map<String, String> get _defaultHeaders => {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
 
-  /// POST: api/setuser/assign - Gán set cho user
+  /// POST: api/setuser/assign - Assign set to user
   Future<BaseResponse<void>> assignSetToUser(AssignSetUserRequest request) async {
     try {
-      final response = await httpClient.post(
-        Uri.parse('$baseUrl/api/setuser/assign'),
+      final response = await _client.post(
+        Uri.parse('$url_api/api/setuser/assign'),
         headers: _defaultHeaders,
         body: json.encode(request.toJson()),
       );
@@ -62,11 +59,11 @@ class SetUserService {
     }
   }
 
-  /// PUT: api/setuser/updateaccess - Cập nhật ngày truy cập
+  /// PUT: api/setuser/updateaccess - Update access date
   Future<BaseResponse<void>> updateAccessDate(UpdateAccessDateRequest request) async {
     try {
-      final response = await httpClient.put(
-        Uri.parse('$baseUrl/api/setuser/updateaccess'),
+      final response = await _client.put(
+        Uri.parse('$url_api/api/setuser/updateaccess'),
         headers: _defaultHeaders,
         body: json.encode(request.toJson()),
       );
@@ -95,11 +92,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/user/{userId} - Lấy sets cho user
+  /// GET: api/setuser/user/{userId} - Get sets for user
   Future<BaseResponse<List<CreatedSetDto>>> getSetsForUser(String userId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/user/$userId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/user/$userId'),
         headers: _defaultHeaders,
       );
 
@@ -132,11 +129,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/getAllSetsOwner/{userId} - Lấy tất cả sets mà user là owner
+  /// GET: api/setuser/getAllSetsOwner/{userId} - Get all sets where user is owner
   Future<BaseResponse<List<CreatedSetDto>>> getAllSetsOwner(String userId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/getAllSetsOwner/$userId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/getAllSetsOwner/$userId'),
         headers: _defaultHeaders,
       );
 
@@ -169,11 +166,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/set/{setId} - Lấy users cho set
+  /// GET: api/setuser/set/{setId} - Get users for set
   Future<BaseResponse<List<SetUserDto>>> getUsersForSet(String setId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/set/$setId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/set/$setId'),
         headers: _defaultHeaders,
       );
 
@@ -206,11 +203,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/getAllSetsJoined/{userId} - Lấy tất cả sets mà user đã join
+  /// GET: api/setuser/getAllSetsJoined/{userId} - Get all sets user has joined
   Future<BaseResponse<List<CreatedSetDto>>> getAllSetsJoined(String userId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/getAllSetsJoined/$userId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/getAllSetsJoined/$userId'),
         headers: _defaultHeaders,
       );
 
@@ -243,11 +240,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/owner/{userId}/{setId} - Kiểm tra user có phải owner của set
+  /// GET: api/setuser/owner/{userId}/{setId} - Check if user is owner of set
   Future<BaseResponse<bool>> isUserOwnerOfSet(String userId, String setId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/owner/$userId/$setId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/owner/$userId/$setId'),
         headers: _defaultHeaders,
       );
 
@@ -275,11 +272,11 @@ class SetUserService {
     }
   }
 
-  /// GET: api/setuser/allsets/{userId} - Lấy tất cả sets của user
+  /// GET: api/setuser/allsets/{userId} - Get all sets for user
   Future<BaseResponse<List<CreatedSetDto>>> getAllSetsByUserId(String userId) async {
     try {
-      final response = await httpClient.get(
-        Uri.parse('$baseUrl/api/setuser/allsets/$userId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/setuser/allsets/$userId'),
         headers: _defaultHeaders,
       );
 
@@ -312,11 +309,11 @@ class SetUserService {
     }
   }
 
-  /// DELETE: api/setuser/remove - Xóa set khỏi user
+  /// DELETE: api/setuser/remove - Remove set from user
   Future<BaseResponse<void>> removeSetFromUser(RemoveSetUserRequest request) async {
     try {
-      final response = await httpClient.delete(
-        Uri.parse('$baseUrl/api/setuser/remove'),
+      final response = await _client.delete(
+        Uri.parse('$url_api/api/setuser/remove'),
         headers: _defaultHeaders,
         body: json.encode(request.toJson()),
       );

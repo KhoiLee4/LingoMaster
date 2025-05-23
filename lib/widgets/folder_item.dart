@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import '../core/domain/dtos/Folder/folder_dto.dart';
+import '../core/domain/dtos/folder_user/get_all_folder_by_user.dart';
 import '../core/navigation/routers.dart';
 
 class FolderItem extends StatelessWidget {
-  final FolderDto item;
+  final GetAllFolderByUserIdResponse item;
 
-  // final String name;
-  // final String author;
-
-  // const FolderItem({super.key, required this.name, required this.author});
   const FolderItem({super.key, required this.item});
 
   @override
@@ -29,7 +25,7 @@ class FolderItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/folderpage");
+          AppRouter.router.navigateTo(context, "/folderpage/${item.folderId}");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -44,7 +40,7 @@ class FolderItem extends StatelessWidget {
               ),
               SizedBox(width: 16),
               Text(
-                item.name,
+                item.folderName,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -70,7 +66,7 @@ class FolderItem extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    item.id.toString(),
+                    item.nameUser,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

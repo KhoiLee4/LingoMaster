@@ -3,7 +3,10 @@ import 'component/class_page.dart';
 
 class ClassRouter {
   static final Handler _mainclassHandler = Handler(
-    handlerFunc: (context, parameters) => ClassScreen(),
+    handlerFunc: (context, parameters){
+      final id = parameters['id']?.first; // Lấy tham số 'id' từ URL
+      return ClassScreen(id: id); // Truyền vào màn hình
+    },
   );
 
   // static final Handler _achievementsHandler = Handler(
@@ -24,7 +27,7 @@ class ClassRouter {
 
   static void defineRoutes(FluroRouter router) {
     router.define(
-      "/classpage",
+      "/classpage/:id",
       handler: _mainclassHandler,
       transitionType: TransitionType.inFromRight,
     );

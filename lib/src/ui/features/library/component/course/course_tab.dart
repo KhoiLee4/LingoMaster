@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/domain/dtos/set/set_dto.dart';
+import '../../../../../../core/domain/dtos/set_user/created_set_dto.dart';
 import '../../../../../../widgets/course_item.dart';
 
 class CourseTab extends StatelessWidget {
@@ -10,32 +11,35 @@ class CourseTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<SetDto> libraryItems = [
-      SetDto(
+    final List<CreatedSetDto> libraryItems = [
+      CreatedSetDto(
         name: 'ETS RC2 test',
         id: 'course',
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
-        idTopic: 'topic',
+        totalCard: 96,
+        nameOwner: '',
+        createdAt: DateTime.now(),
+        dateAccess: DateTime.now(),
       ),
-      SetDto(
+      CreatedSetDto(
         name: 'ETS RC2 test',
         id: 'course',
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
-        idTopic: 'topic',
+        totalCard: 96,
+        nameOwner: '',
+        createdAt: DateTime.now(),
+        dateAccess: DateTime.now(),
       ),
-      SetDto(
+      CreatedSetDto(
         name: 'ETS RC2 test',
         id: 'course',
-        createAt: DateTime.now(),
-        updateAt: DateTime.now(),
-        idTopic: 'topic',
+        totalCard: 96,
+        nameOwner: '',
+        createdAt: DateTime.now(),
+        dateAccess: DateTime.now(),
       ),
     ];
 
     // Lọc danh sách theo selectedFilter
-    List<SetDto> filteredItems = libraryItems.where((item) {
+    List<CreatedSetDto> filteredItems = libraryItems.where((item) {
       if (selectedFilter == 'Tất cả') return true;
       // Thêm logic lọc khác ở đây
       return true;

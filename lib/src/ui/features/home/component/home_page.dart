@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/data/NativeService/class_service.dart';
 import '../../../../../core/data/NativeService/folder_service.dart';
+import '../../../../../core/data/NativeService/folder_user_service.dart';
+import '../../../../../core/data/NativeService/set_service.dart';
+import '../../../../../core/data/NativeService/set_user_service.dart';
 import '../../../../../core/design_systems/theme/app_colors.dart';
 import '../../../../../core/domain/dtos/classroom/classroom_dto.dart';
-import '../../../../../core/domain/dtos/set/set_dto.dart';
 import '../../../../../core/navigation/routers.dart';
 import '../../../../../widgets/class_item.dart';
 import '../../../../../widgets/course_item.dart';
 import '../../../../../widgets/folder_item.dart';
+import '../bloc/class/class_bloc.dart';
+import '../bloc/class/class_event.dart';
+import '../bloc/class/class_state.dart';
+import '../bloc/course/course_bloc.dart';
+import '../bloc/course/course_event.dart';
+import '../bloc/course/course_state.dart';
 import '../bloc/folder/folder_bloc.dart';
 import '../bloc/folder/folder_event.dart';
 import '../bloc/folder/folder_state.dart';
@@ -19,13 +29,12 @@ class HomeProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FolderBloc>(
-      create: (context) {
-        final bloc = FolderBloc(FolderService());
-        // Trigger loading folders immediately after creating the bloc
-        bloc.add(LoadFolders());
-        return bloc;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => FolderBloc(FolderUserService())..add(LoadFolders())),
+        BlocProvider(create: (_) => CourseBloc(SetUserService())..add(LoadCourses())),
+        BlocProvider(create: (_) => ClassBloc(ClassRoomService())..add(LoadClasses())),
+      ],
       child: const HomeScreen(),
     );
   }
@@ -472,26 +481,78 @@ class CoursesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sampleCourses = List.generate(
-      4,
-      (index) => CourseItem(
-        item: SetDto(
-          name: 'ETS RC2 test ${index + 1}',
-          id: 'course_$index',
-          createAt: DateTime.now(),
-          updateAt: DateTime.now(),
-          idTopic: 'topic_$index',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'Học phần'),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 150,
+          child: const CourseListSection(),
         ),
-      ),
-    );
-
-    return HorizontalScrollSection(
-      title: 'Học phần',
-      items: sampleCourses,
-      height: 150,
+      ],
     );
   }
 }
+
+// Folder list with BLoC integration - FIXED VERSION
+class CourseListSection extends StatelessWidget {
+  const CourseListSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CourseBloc, CourseState>(
+      builder: (context, state) {
+        if (state is CourseLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CourseLoaded) {
+          if (state.courses == null) {
+            return const Center(
+              child: Text(
+                'Chưa có học phần nào',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.courses?.length,
+            itemBuilder: (context, index) {
+              return CourseItem(item: state.courses![index]);
+            },
+          );
+        } else if (state is CourseError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CourseBloc>().add(LoadCourses());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<CourseBloc>().add(LoadCourses());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}
+
 
 // Classes section widget
 class ClassesSection extends StatelessWidget {
@@ -499,27 +560,74 @@ class ClassesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sampleClasses = List.generate(
-      4,
-      (index) => ClassItem(
-        item: ClassRoomDto(
-          name: 'Lớp học ${index + 1}',
-          classCode: '0 học phần',
-          id: 'class_$index',
-          description: 'Mô tả lớp học',
-          isDelete: false,
-          isPublic: true,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'Lớp học'),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 150,
+          child: const ClassListSection(),
         ),
-        hasIcon: false,
-      ),
+      ],
     );
+  }
+}
 
-    return HorizontalScrollSection(
-      title: 'Lớp học',
-      items: sampleClasses,
-      height: 130,
+// Folder list with BLoC integration - FIXED VERSION
+class ClassListSection extends StatelessWidget {
+  const ClassListSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ClassBloc, ClassState>(
+      builder: (context, state) {
+        if (state is ClassLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is ClassLoaded) {
+          if (state.classes == null) {
+            return const Center(
+              child: Text(
+                'Chưa có lớp học nào',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.classes?.length,
+            itemBuilder: (context, index) {
+              return ClassItem(item: state.classes![index], hasIcon: false,);
+            },
+          );
+        } else if (state is ClassError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<ClassBloc>().add(LoadClasses());
+                  },
+                  child: const Text('Thử lại'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Initial state - trigger loading if not already loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              context.read<ClassBloc>().add(LoadClasses());
+            }
+          });
+
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
