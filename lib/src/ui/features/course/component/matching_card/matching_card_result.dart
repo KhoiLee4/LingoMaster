@@ -30,7 +30,9 @@ class _MatchingCardResultState extends State<MatchingCardResult> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black54),
-          onPressed: () {},
+          onPressed: () {
+
+          },
         ),
         title: const Text(
           'Ghép thẻ',
