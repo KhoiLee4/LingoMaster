@@ -63,17 +63,17 @@ class _MatchingCardState extends State<MatchingCardScreen> with TickerProviderSt
             size: 30,
           ),
           onPressed: () {
-            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+            AppRouter.router.navigateTo(context, "/home");
           },
         ),
-        title: Text(
-          '${_remainingTime.toStringAsFixed(1)} giây',
-          style: const TextStyle(
-            color: Color(0xFF465060),
-            fontSize: 24,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        // title: Text(
+        //   '${_remainingTime.toStringAsFixed(1)} giây',
+        //   style: const TextStyle(
+        //     color: Color(0xFF465060),
+        //     fontSize: 24,
+        //     fontWeight: FontWeight.w500,
+        //   ),
+        // ),
         actions: [
           IconButton(
             icon: const Icon(

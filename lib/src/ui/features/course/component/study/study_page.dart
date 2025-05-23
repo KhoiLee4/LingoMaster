@@ -67,7 +67,7 @@ class _StudyState extends State<Study> {
   }
 
   int currentQuestionIndex = 0;
-  int score = 1;
+  int score = 0;
   String? selectedAnswer;
   bool isAnswerCorrect = false;
   bool showFeedback = false;
@@ -93,16 +93,35 @@ class _StudyState extends State<Study> {
 
       canProceed = true;
 
-      if (isAnswerCorrect && currentQuestionIndex < questionList.length - 1) {
-        Future.delayed(const Duration(seconds: 1), () {
-          if (mounted) _proceedToNextQuestion(questionList);
-        });
+      // Xử lý sau khi trả lời đúng
+      if (isAnswerCorrect) {
+        // Kiểm tra nếu đây là câu hỏi cuối cùng
+        if (currentQuestionIndex >= questionList.length - 1) {
+          // Delay trước khi điều hướng để người dùng thấy feedback
+          Future.delayed(const Duration(seconds: 1), () {
+            if (mounted) {
+              AppRouter.router.navigateTo(context, "/studySuccess", replace: true);
+            }
+          });
+        } else {
+          // Chuyển sang câu hỏi tiếp theo
+          Future.delayed(const Duration(seconds: 1), () {
+            if (mounted) _proceedToNextQuestion(questionList);
+          });
+        }
       }
     });
   }
 
   void _proceedToNextQuestion(List<MultipleChoiceQuestion> questionList) {
     if (!canProceed) return;
+
+    // Kiểm tra nếu đây là câu hỏi cuối cùng
+    // if (currentQuestionIndex >= questionList.length - 1) {
+    //   // Điều hướng đến trang thành công
+    //   AppRouter.router.navigateTo(context, "/studySuccess", replace: true);
+    //   return;
+    // }
 
     setState(() {
       currentQuestionIndex++;
@@ -259,10 +278,6 @@ class _StudyState extends State<Study> {
 
                   // Answer Options
                   ...currentQuestion.choices.map((option) {
-                    // Kiểm tra nếu đã ghép hết tất cả các cặp
-                    if (currentQuestionIndex >= questionList.length) {
-                      _showCompletionDialog();
-                    }
 
                     final isCorrect = option == currentQuestion.answer;
                     final isSelected = selectedAnswer == option;
@@ -393,26 +408,6 @@ class _StudyState extends State<Study> {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
-  }
-  void _showCompletionDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Chúc mừng!'),
-        content: const Text('Bạn đã hoàn thành.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Ở đây có thể thêm logic chuyển sang màn hình tiếp theo
-              AppRouter.router.navigateTo(context, "/coursePage/${widget.id}", replace: true);
-            },
-            child: const Text('Tiếp tục'),
-          ),
-        ],
-      ),
     );
   }
 }
