@@ -145,7 +145,7 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
                                 color: AppColors.neutralGray600, size: 30),
                             onPressed: () {
                               // Handle close button press
-                              AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+                              AppRouter.router.navigateTo(context, "/home");
                             },
                           ),
                           Text(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../core/navigation/routers.dart';
+
 class MemoryCardSuccess extends StatelessWidget {
   final int totalQuestions;
   final int correctAnswers;
@@ -24,7 +26,9 @@ class MemoryCardSuccess extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black54),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            AppRouter.router.navigateTo(context, "/home");
+          },
         ),
         title: Text(
           '$correctAnswers / $totalQuestions',

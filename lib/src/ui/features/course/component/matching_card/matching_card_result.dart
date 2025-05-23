@@ -31,7 +31,7 @@ class _MatchingCardResultState extends State<MatchingCardResult> {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black54),
           onPressed: () {
-
+            AppRouter.router.navigateTo(context, "/home");
           },
         ),
         title: const Text(

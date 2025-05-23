@@ -23,7 +23,7 @@ class MatchingCardReady extends StatelessWidget {
             size: 30,
           ),
           onPressed: () {
-            // Xử lý khi nhấn nút đóng
+            AppRouter.router.navigateTo(context, "/home");
           },
         ),
         title: const Text(
