@@ -48,7 +48,8 @@ class _TestScreenState extends State<TestScreen> {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black54),
           onPressed: () {
-            AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+            // Handle closing the quiz
+            AppRouter.router.navigateTo(context, "/home", replace: true);
           },
         ),
         centerTitle: true,

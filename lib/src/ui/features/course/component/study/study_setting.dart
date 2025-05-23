@@ -30,7 +30,7 @@ class _StudySettingState extends State<StudySetting> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            AppRouter.router.navigateTo(context, "/study", replace: true);
+            AppRouter.router.navigateTo(context, "/home", replace: true);
           }
         ),
         title: const Text(

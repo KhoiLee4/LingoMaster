@@ -25,7 +25,9 @@ class _MatchingCardSettingState extends State<MatchingCardSetting> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black54, size: 28),
-          onPressed: () {},
+          onPressed: () {
+            AppRouter.router.navigateTo(context, "/home", replace: true);
+          },
         ),
         title: const Text(
           'Tùy chọn',
