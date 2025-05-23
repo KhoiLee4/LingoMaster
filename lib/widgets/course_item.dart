@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../core/domain/dtos/set/set_dto.dart';
+import '../core/domain/dtos/set_user/created_set_dto.dart';
 import '../core/navigation/routers.dart';
 
 class CourseItem extends StatelessWidget {
-  final SetDto item;
+  final CreatedSetDto item;
 
   const CourseItem({super.key,  required this.item});
 
@@ -26,7 +27,7 @@ class CourseItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/coursepage/15E8C7A0-103B-47F7-6559-08DD975190C2");
+          AppRouter.router.navigateTo(context, "/coursepage/${item.id}");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -44,7 +45,7 @@ class CourseItem extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                ' thuật ngữ',
+                '${item.totalCard} thuật ngữ',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],
@@ -69,7 +70,7 @@ class CourseItem extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    '${item.description}',
+                    '${item.nameOwner}',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

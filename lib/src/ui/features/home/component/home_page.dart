@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lingo_master/core/data/NativeService/folder_user_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/data/NativeService/folder_service.dart';
@@ -21,7 +22,7 @@ class HomeProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<FolderBloc>(
       create: (context) {
-        final bloc = FolderBloc(FolderService());
+        final bloc = FolderBloc(FolderUserService() );
         // Trigger loading folders immediately after creating the bloc
         bloc.add(LoadFolders());
         return bloc;
@@ -472,22 +473,11 @@ class CoursesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sampleCourses = List.generate(
-      4,
-      (index) => CourseItem(
-        item: SetDto(
-          name: 'ETS RC2 test ${index + 1}',
-          id: 'course_$index',
-          createAt: DateTime.now(),
-          updateAt: DateTime.now(),
-          idTopic: 'topic_$index',
-        ),
-      ),
-    );
+    final sampleCourses =new List.empty();
 
     return HorizontalScrollSection(
       title: 'Học phần',
-      items: sampleCourses,
+      items: sampleCourses as List<Widget>,
       height: 150,
     );
   }

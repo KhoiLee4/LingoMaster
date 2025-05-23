@@ -118,7 +118,6 @@ class _LibraryScreenState extends State<LibraryScreen>
       ),
       body: Column(
         children: [
-          // Filter Section - chỉ hiển thị cho tab "Học phần"
           if (_selectedTabIndex == 0) _buildFilterSection(),
 
           // Content Section
@@ -126,9 +125,9 @@ class _LibraryScreenState extends State<LibraryScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                CourseTab(selectedFilter: _selectedFilter),
-                FolderTab(),
-                ClassTab(),
+                CourseProvider(),
+                FolderProvider(),
+                ClasProvider(),
               ],
             ),
           ),
