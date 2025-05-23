@@ -110,6 +110,16 @@ class _StudyState extends State<Study> {
           });
         }
       }
+      else{
+        if (currentQuestionIndex >= questionList.length - 1) {
+          // Delay trước khi điều hướng để người dùng thấy feedback
+          Future.delayed(const Duration(seconds: 1), () {
+            if (mounted) {
+              AppRouter.router.navigateTo(context, "/studySuccess", replace: true);
+            }
+          });
+        }
+      }
     });
   }
 
@@ -168,7 +178,7 @@ class _StudyState extends State<Study> {
                         IconButton(
                           icon: Icon(Icons.close, size: 32, color: Colors.grey[600]),
                           onPressed: () {
-                            AppRouter.router.navigateTo(context, "/studySetting", replace: true);
+                            AppRouter.router.navigateTo(context, "/home", replace: true);
                           },
                         ),
                         IconButton(

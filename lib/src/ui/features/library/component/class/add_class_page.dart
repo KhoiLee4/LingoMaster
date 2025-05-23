@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lingo_master/core/data/NativeService/class_service.dart';
+import 'package:lingo_master/core/data/NativeService/class_user_service.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
+
+import '../../../../../../core/domain/dtos/classroom/create_classroom_dto.dart';
+import '../../../../../../core/domain/dtos/classroom_set/assign_class_room_user_dto.dart';
 
 class AddLopHocScreen extends StatefulWidget {
   const AddLopHocScreen({super.key});
@@ -11,6 +17,10 @@ class _AddLopHocScreenState extends State<AddLopHocScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   bool _allowStudentInvite = true;
+  final _classService = new ClassRoomService();
+  late CreateClassRoomDto _createClassRoomDto;
+  final _classUserService = new ClassRoomUserService();
+  late AssignClassRoomUserDto _assignClassRoomUserDto;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +168,7 @@ class _AddLopHocScreenState extends State<AddLopHocScreen> {
     );
   }
 
-  void _createLopHoc() {
+  void _createLopHoc() async{
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -169,6 +179,12 @@ class _AddLopHocScreenState extends State<AddLopHocScreen> {
       return;
     }
 
+    _createClassRoomDto = new CreateClassRoomDto(name: _titleController.text, description: _descriptionController.text, isPublic: _allowStudentInvite);
+    var response = await _classService.createClassRoom(_createClassRoomDto);
+    if (response != null){
+      _assignClassRoomUserDto = new AssignClassRoomUserDto(userId: Session.user!.Id!, classRoomId: response.data!.id!);
+      _classUserService.assignUserToClassRoom(_assignClassRoomUserDto);
+    }
     // Thực hiện logic tạo lớp học ở đây
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(

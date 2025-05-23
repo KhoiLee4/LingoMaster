@@ -27,8 +27,12 @@ class ClassRoomDto {
       description: json['description'],
       isDelete: json['isDelete'] ?? false,
       isPublic: json['isPublic'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(), // hoặc null nếu field có thể null
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : DateTime.now(), // hoặc null nếu field có thể null
     );
   }
 

@@ -13,7 +13,15 @@ class LibraryRouter {
   static final Handler _libraruHandler = Handler(
     handlerFunc: (context, parameters) => LibraryScreen(),
   );
-
+  static final Handler _addCourseHandler = Handler(
+    handlerFunc: (context, parameters) => AddHocPhanScreen(),
+  );
+  static final Handler _addFolderHandler = Handler(
+    handlerFunc: (context, parameters) => AddThuMucScreen(),
+  );
+  static final Handler _addClassHandler = Handler(
+    handlerFunc: (context, parameters) => AddLopHocScreen(),
+  );
   // static final Handler _courseHandler = Handler(
   //   handlerFunc: (context, parameters) => CourseScreen(),
   // );
@@ -42,6 +50,21 @@ class LibraryRouter {
     router.define(
       "/library",
       handler: _libraruHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/addCourse",
+      handler: _addCourseHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/addFolder",
+      handler: _addFolderHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/addClass",
+      handler: _addClassHandler,
       transitionType: TransitionType.inFromRight,
     );
     // router.define(
