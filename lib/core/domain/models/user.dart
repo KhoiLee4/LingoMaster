@@ -24,6 +24,7 @@ class User{
   String? ProfilePicture;
 
   User({
+    required this.Id,
     required this.FirstName,
     required this.LastName,
     required this.Email,
@@ -45,6 +46,6 @@ class User{
     required this.TwoFactorEnabled,
     required this.LockoutEnd,
     required this.AccessFailedCount,
-    this.ProfilePicture, required Id
+    this.ProfilePicture,
   });
 }

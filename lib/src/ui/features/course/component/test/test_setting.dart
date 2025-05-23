@@ -6,7 +6,8 @@ import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
 import '../../../../../../core/navigation/routers.dart';
 
 class TestSetting extends StatefulWidget {
-  const TestSetting({super.key});
+  final String? id;
+  const TestSetting({super.key, this.id});
 
   @override
   State<TestSetting> createState() => _TestSettingState();
@@ -235,7 +236,7 @@ class _TestSettingState extends State<TestSetting> {
                 ),
                 onPressed: () {
                   // Start the test action
-                  AppRouter.router.navigateTo(context, "/test", replace: true);
+                  AppRouter.router.navigateTo(context, "/test/${widget.id}", replace: true);
                 },
                 child: const Text(
                   "Bắt đầu làm kiểm tra",

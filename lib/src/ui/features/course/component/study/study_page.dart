@@ -1,335 +1,417 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lingo_master/core/data/NativeService/card_service.dart';
+import 'package:lingo_master/core/data/NativeService/question_service.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
+import 'package:lingo_master/src/ui/features/course/bloc/question_bloc/question_event.dart';
+import 'package:lingo_master/src/ui/features/course/bloc/question_bloc/question_state.dart';
 
+import '../../../../../../core/domain/dtos/question/multiple_choice_question_dto.dart';
 import '../../../../../../core/navigation/routers.dart';
+import '../../bloc/question_bloc/question_bloc.dart';
+
+class StudyProvider extends StatelessWidget {
+  final String? id;
+  const StudyProvider({super.key, this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<QuestionBloc>(
+      create: (context) {
+        final bloc = QuestionBloc(QuestionsService(), CardService(), id!);
+        // Trigger loading folders immediately after creating the bloc
+        bloc.add(LoadQuestion());
+        return bloc;
+      },
+      child: StudyScreen(id: id),
+    );
+  }
+}
 
 class StudyScreen extends StatefulWidget {
-  const StudyScreen({super.key});
+  final String? id;
+
+  const StudyScreen({super.key, this.id});
 
   @override
   State<StudyScreen> createState() => _StudyPageState();
 }
 
 class _StudyPageState extends State<StudyScreen> {
-  // List of questions and their options
-  final List<Map<String, dynamic>> questions = [
-    {
-      'question': 'đồ uống',
-      'options': ['drink/beverage', 'dinner', 'dining room', 'refreshment'],
-      'correctAnswer': 'drink/beverage',
-    },
-    {
-      'question': 'đồ ăn vặt',
-      'options': ['snack', 'fruit', 'lunch', 'entree'],
-      'correctAnswer': 'snack',
-    },
-    {
-      'question': '(n) nhân viên',
-      'options': ['generate', 'employee', 'colleague', 'practice'],
-      'correctAnswer': 'employee',
-    },
-  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Study(),
+    );
+  }
+}
+
+class Study extends StatefulWidget {
+  final String? id;
+  const Study({super.key, this.id});
+
+
+
+  @override
+  State<Study> createState() => _StudyState();
+}
+class _StudyState extends State<Study> {
+  @override
+  void initState() {
+    super.initState();
+    // print("ID nhận được: ${widget.id}");
+  }
 
   int currentQuestionIndex = 0;
-  int score = 1; // Starting with 1 as shown in the images
+  int score = 1;
   String? selectedAnswer;
   bool isAnswerCorrect = false;
   bool showFeedback = false;
   bool canProceed = false;
   bool showCorrectAnswer = false;
 
-  void _handleAnswerSelection(String selectedOption) {
-    if (showFeedback) return; // Prevent selecting another answer during feedback
+  void _handleAnswerSelection(
+      String selectedOption, List<MultipleChoiceQuestion> questionList) {
+    if (showFeedback) return;
 
-    final currentQuestion = questions[currentQuestionIndex];
+    final currentQuestion = questionList[currentQuestionIndex];
 
     setState(() {
       selectedAnswer = selectedOption;
-      isAnswerCorrect = selectedOption == currentQuestion['correctAnswer'];
+      isAnswerCorrect = selectedOption == currentQuestion.answer;
       showFeedback = true;
 
-      // Only increment score for correct answers
       if (isAnswerCorrect) {
         score++;
       } else {
-        // Show the correct answer when the user selects the wrong answer
         showCorrectAnswer = true;
       }
 
       canProceed = true;
 
-      // Auto proceed to next question after a delay
-      if (currentQuestionIndex < questions.length - 1) {
-        Future.delayed(Duration(seconds: 2), () {
-          if (mounted && isAnswerCorrect) {
-            _proceedToNextQuestion();
-          }
+      if (isAnswerCorrect && currentQuestionIndex < questionList.length - 1) {
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) _proceedToNextQuestion(questionList);
         });
       }
     });
   }
 
-  void _proceedToNextQuestion() {
+  void _proceedToNextQuestion(List<MultipleChoiceQuestion> questionList) {
     if (!canProceed) return;
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        selectedAnswer = null;
-        showFeedback = false;
-        canProceed = false;
-        showCorrectAnswer = false;
-      });
-    }
+    setState(() {
+      currentQuestionIndex++;
+      selectedAnswer = null;
+      showFeedback = false;
+      canProceed = false;
+      showCorrectAnswer = false;
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Top bar with back button and settings
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle back button press
-                        AppRouter.router.navigateTo(context, "/coursepage", replace: true);
-                      },
-                      child: Icon(Icons.close, size: 32, color: Colors.grey[600]),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        AppRouter.router.navigateTo(context, "/studySetting", replace: true);
-                      },
-                      child: Icon(Icons.settings, size: 32, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
+    return BlocBuilder<QuestionBloc, QuestionState>(
+      builder: (context, state) {
+        if (state is QuestionLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is QuestionLoaded) {
+          final questionList = state.questions ?? [];
+
+          if (questionList.isEmpty) {
+            return const Center(
+              child: Text(
+                'Chưa có câu hỏi nào',
+                style: TextStyle(color: Colors.grey),
               ),
+            );
+          }
 
-              // Progress bar with scores
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40.0),
-                child: Row(
-                  children: [
-                    // Score on the left
-                    Container(
-                      width: 50,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.lightGreen[100],
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Center(
-                        child: Text(
-                          score.toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+          final currentQuestion = questionList[currentQuestionIndex];
+          final progressValue = (currentQuestionIndex + 1) / questionList.length;
+
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.close, size: 32, color: Colors.grey[600]),
+                          onPressed: () => Navigator.pop(context),
                         ),
-                      ),
+                        IconButton(
+                          icon: Icon(Icons.settings, size: 32, color: Colors.grey[600]),
+                          onPressed: () {
+                            AppRouter.router.navigateTo(context, "/studySetting", replace: true);
+                          },
+                        ),
+                      ],
                     ),
+                  ),
 
-                    // Progress bar in the middle
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(5),
+                  // Progress
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40.0),
+                    child: Row(
+                      children: [
+                        // Current Score
+                        Container(
+                          width: 50,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.lightGreen[100],
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Center(
+                            child: Text(
+                              score.toString(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            FractionallySizedBox(
-                              widthFactor: (currentQuestionIndex + 1) / questions.length,
-                              child: Container(
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: Colors.green[300],
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Score on the right (target/total)
-                    Container(
-                      width: 50,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '46',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
+
+                        // Progress Bar
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: LinearProgressIndicator(
+                              value: progressValue,
+                              backgroundColor: Colors.grey[200],
+                              color: Colors.green[300],
+                              minHeight: 10,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+
+                        // Total Questions
+                        Container(
+                          width: 50,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Center(
+                            child: Text(
+                              questionList.length.toString(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-              // Feedback for the current answer
-
-
-              // Question text
-              Text(
-                questions[currentQuestionIndex]['question'],
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-
-              // Answer selection text
-              Text(
-                'Chọn câu trả lời',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
-              ),
-              if (showFeedback)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: Text(
-                    isAnswerCorrect
-                        ? 'Tuyệt vời!'
-                        : 'Chưa đúng, hãy cố gắng nhé!',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isAnswerCorrect ? Colors.green : Colors.red,
+                  // Question
+                  Text(
+                    currentQuestion.question,
+                    style: const TextStyle(
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              const SizedBox(height: 20),
 
-              // Answer options
-              ...(questions[currentQuestionIndex]['options'] as List<String>).map((option) {
-                final isCorrectOption = option == questions[currentQuestionIndex]['correctAnswer'];
-                final bool isSelected = selectedAnswer == option;
-                final bool showCorrectIcon = isSelected && isCorrectOption;
-                final bool showIncorrectIcon = isSelected && !isCorrectOption;
-                final bool highlightCorrectAnswer = showCorrectAnswer && isCorrectOption;
+                  const SizedBox(height: 20),
 
-                Color borderColor = Colors.grey[300]!;
-                if (showCorrectIcon || highlightCorrectAnswer) {
-                  borderColor = Colors.green;
-                } else if (showIncorrectIcon) {
-                  borderColor = Colors.red;
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: GestureDetector(
-                    onTap: () => _handleAnswerSelection(option),
-                    child: Container(
-                      width: double.infinity,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: borderColor,
-                          width: (showFeedback && isSelected) || highlightCorrectAnswer ? 2.0 : 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                        color: showCorrectIcon || highlightCorrectAnswer
-                            ? Colors.green.withOpacity(0.1)
-                            : showIncorrectIcon
-                            ? Colors.red.withOpacity(0.1)
-                            : Colors.white,
-                      ),
-                      child: Row(
-                        children: [
-                          // Checkmark or X icon
-                          if (showCorrectIcon || showIncorrectIcon || highlightCorrectAnswer)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: Icon(
-                                showIncorrectIcon ? Icons.close : Icons.check,
-                                color: showIncorrectIcon ? Colors.red : Colors.green,
-                                size: 24,
-                              ),
-                            ),
-
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                option,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: showIncorrectIcon ? Colors.red :
-                                  highlightCorrectAnswer ? Colors.green :
-                                  Colors.black,
-                                  fontWeight: highlightCorrectAnswer ? FontWeight.bold : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  // Answer Prompt
+                  Text(
+                    'Chọn câu trả lời',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[700],
                     ),
                   ),
-                );
-              }).toList(),
 
-              // Continue button (shows up when feedback is displayed)
-              if (showFeedback && !isAnswerCorrect)
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _proceedToNextQuestion,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryBlue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: const Text(
-                        'Tiếp tục',
+                  // Feedback
+                  if (showFeedback)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Text(
+                        isAnswerCorrect ? 'Tuyệt vời!' : 'Chưa đúng, hãy cố gắng nhé!',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 16,
+                          color: isAnswerCorrect ? Colors.green : Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Answer Options
+                  ...currentQuestion.choices.map((option) {
+                    // Kiểm tra nếu đã ghép hết tất cả các cặp
+                    if (currentQuestionIndex >= questionList.length) {
+                      _showCompletionDialog();
+                    }
+
+                    final isCorrect = option == currentQuestion.answer;
+                    final isSelected = selectedAnswer == option;
+
+                    Color borderColor = Colors.grey[300]!;
+                    Color textColor = Colors.black;
+                    bool showIcon = false;
+                    IconData? icon;
+                    Color? iconColor;
+
+                    if (showFeedback) {
+                      if (isSelected) {
+                        borderColor = isCorrect ? Colors.green : Colors.red;
+                        textColor = isCorrect ? Colors.green : Colors.red;
+                        showIcon = true;
+                        icon = isCorrect ? Icons.check : Icons.close;
+                        iconColor = isCorrect ? Colors.green : Colors.red;
+                      } else if (isCorrect && showCorrectAnswer) {
+                        borderColor = Colors.green;
+                        textColor = Colors.green;
+                        showIcon = true;
+                        icon = Icons.check;
+                        iconColor = Colors.green;
+                      }
+                    }
+
+
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: GestureDetector(
+                        onTap: () => _handleAnswerSelection(option, questionList),
+                        child: Container(
+                          width: double.infinity,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: borderColor,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: showFeedback && (isSelected || isCorrect)
+                                ? (isCorrect
+                                ? Colors.green.withOpacity(0.1)
+                                : Colors.red.withOpacity(0.1))
+                                : Colors.white,
+                          ),
+                          child: Row(
+                            children: [
+                              if (showIcon)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Icon(icon, color: iconColor, size: 24),
+                                ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    option,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: textColor,
+                                      fontWeight: isCorrect && showFeedback
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+
+                  // Continue Button (for wrong answers)
+                  if (showFeedback && !isAnswerCorrect)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () => _proceedToNextQuestion(questionList),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                          child: const Text(
+                            'Tiếp tục',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        } else if (state is QuestionError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Lỗi: ${state.message}"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<QuestionBloc>().add(LoadQuestion());
+                  },
+                  child: const Text('Thử lại'),
                 ),
-            ],
+              ],
+            ),
+          );
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              context.read<QuestionBloc>().add(LoadQuestion());
+            }
+          });
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Chúc mừng!'),
+        content: const Text('Bạn đã hoàn thành.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Ở đây có thể thêm logic chuyển sang màn hình tiếp theo
+              AppRouter.router.navigateTo(context, "/coursePage/${widget.id}", replace: true);
+            },
+            child: const Text('Tiếp tục'),
           ),
-        ),
+        ],
       ),
     );
   }
