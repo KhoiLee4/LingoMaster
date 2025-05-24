@@ -55,28 +55,37 @@ class ClassRoomService extends BaseService {
   Future<BaseResponse<ClassRoomDto>> getClassRoomById(String classRoomId) async {
     final url = '$url_api/api/ClassRoom/$classRoomId';
 
-    final response = await _client.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${Session.token}', // nếu cần
-      },
-    );
-
-    final Map<String, dynamic> jsonData = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      return BaseResponse<ClassRoomDto>.fromJson(
-        jsonData,
-            (data) => ClassRoomDto.fromJson(data as Map<String, dynamic>),
+    try {
+      final response = await _client.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${Session.token}',
+        },
       );
-    } else {
+
+      final Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return BaseResponse<ClassRoomDto>.fromJson(
+          jsonData,
+              (data) => ClassRoomDto.fromJson(data as Map<String, dynamic>),
+        );
+      } else {
+        return BaseResponse<ClassRoomDto>(
+          success: false,
+          message: jsonData['message'] ?? 'Failed to load classroom',
+          data: null,
+          errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
+        );
+      }
+    } catch (e) {
       return BaseResponse<ClassRoomDto>(
         success: false,
-        message: jsonData['message'] ?? 'Failed to load classroom',
+        message: 'Error occurred: $e',
         data: null,
-        errors: jsonData['errors'] != null ? List<String>.from(jsonData['errors']) : null,
+        errors: null,
       );
     }
   }

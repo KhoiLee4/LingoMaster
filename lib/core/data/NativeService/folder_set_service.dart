@@ -1,26 +1,23 @@
-
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as _client;
 
 import '../../domain/dtos/folder_set/folder_set_dto.dart';
 import '../../domain/dtos/folder_set/get_all_set_by_folder.dart';
 import '../../domain/models/base-reponse.dart';
+import 'BaseService.dart';
 
-class FolderSetService {
-  final String baseUrl;
-  final http.Client _httpClient;
 
-  FolderSetService({
-    required this.baseUrl,
-    http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+class FolderSetService extends BaseService {
+  // Constructor - có thể truyền tham số để bỏ qua SSL nếu cần
+  FolderSetService({bool ignoreSSLCertificate = false})
+      : super(ignoreSSLCertificate: ignoreSSLCertificate);
 
   // Assign a set to a folder
   Future<BaseResponse<void>> assignSetToFolder(FolderSetDto request) async {
     try {
-      final response = await _httpClient.post(
-        Uri.parse('$baseUrl/api/FolderSet/assign'),
+      final response = await _client.post(
+        Uri.parse('$url_api/api/FolderSet/assign'),
         headers: {
           'Content-Type': 'application/json',
           // Add authorization header if needed
@@ -46,8 +43,8 @@ class FolderSetService {
   // Get all sets for a specific folder
   Future<BaseResponse<List<dynamic>>> getSetsForFolder(String folderId) async {
     try {
-      final response = await _httpClient.get(
-        Uri.parse('$baseUrl/api/FolderSet/folder/$folderId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/FolderSet/folder/$folderId'),
         headers: {
           'Content-Type': 'application/json',
           // Add authorization header if needed
@@ -72,8 +69,8 @@ class FolderSetService {
   // Get all folders for a specific set
   Future<BaseResponse<List<dynamic>>> getFoldersForSet(String setId) async {
     try {
-      final response = await _httpClient.get(
-        Uri.parse('$baseUrl/api/FolderSet/set/$setId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/FolderSet/set/$setId'),
         headers: {
           'Content-Type': 'application/json',
           // Add authorization header if needed
@@ -98,8 +95,8 @@ class FolderSetService {
   // Get all sets by folder ID with detailed information
   Future<BaseResponse<List<GetAllSetsByFolderIdResponse>>> getAllSetsByFolderId(String folderId) async {
     try {
-      final response = await _httpClient.get(
-        Uri.parse('$baseUrl/api/FolderSet/GetAllSetsByFolderId/$folderId'),
+      final response = await _client.get(
+        Uri.parse('$url_api/api/FolderSet/GetAllSetsByFolderId/$folderId'),
         headers: {
           'Content-Type': 'application/json',
           // Add authorization header if needed
@@ -128,8 +125,8 @@ class FolderSetService {
   // Remove a set from a folder
   Future<BaseResponse<void>> removeSetFromFolder(FolderSetDto request) async {
     try {
-      final response = await _httpClient.delete(
-        Uri.parse('$baseUrl/api/FolderSet/remove'),
+      final response = await _client.delete(
+        Uri.parse('$url_api/api/FolderSet/remove'),
         headers: {
           'Content-Type': 'application/json',
           // Add authorization header if needed

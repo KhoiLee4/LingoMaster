@@ -5,8 +5,8 @@ class ClassRoomDto {
   String? description;
   bool isDelete;
   bool isPublic;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt; // Thay đổi thành nullable
+  DateTime? updatedAt; // Thay đổi thành nullable
 
   ClassRoomDto({
     required this.id,
@@ -15,8 +15,8 @@ class ClassRoomDto {
     this.description,
     required this.isDelete,
     required this.isPublic,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt, // Không bắt buộc
+    this.updatedAt, // Không bắt buộc
   });
 
   factory ClassRoomDto.fromJson(Map<String, dynamic> json) {
@@ -27,8 +27,9 @@ class ClassRoomDto {
       description: json['description'],
       isDelete: json['isDelete'] ?? false,
       isPublic: json['isPublic'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      // Kiểm tra null trước khi parse DateTime
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 
@@ -39,7 +40,7 @@ class ClassRoomDto {
     'description': description,
     'isDelete': isDelete,
     'isPublic': isPublic,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
+    'createdAt': createdAt?.toIso8601String(),
+    'updatedAt': updatedAt?.toIso8601String(),
   };
 }

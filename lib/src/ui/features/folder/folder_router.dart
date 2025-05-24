@@ -5,7 +5,7 @@ class FolderRouter {
   static final Handler _mainfolderHandler = Handler(
     handlerFunc: (context, parameters) {
       final id = parameters['id']?.first;
-      return FolderScreen(id: id);
+      return FolderProvider(id: id);
     },
   );
 

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lingo_master/core/domain/models/session.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../core/data/NativeService/class_service.dart';
-import '../../../../../core/data/NativeService/folder_service.dart';
+import '../../../../../core/data/NativeService/class_user_service.dart';
 import '../../../../../core/data/NativeService/folder_user_service.dart';
-import '../../../../../core/data/NativeService/set_service.dart';
 import '../../../../../core/data/NativeService/set_user_service.dart';
 import '../../../../../core/design_systems/theme/app_colors.dart';
-import '../../../../../core/domain/dtos/classroom/classroom_dto.dart';
 import '../../../../../core/navigation/routers.dart';
 import '../../../../../widgets/class_item.dart';
 import '../../../../../widgets/course_item.dart';
@@ -33,7 +29,7 @@ class HomeProvider extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => FolderBloc(FolderUserService())..add(LoadFolders())),
         BlocProvider(create: (_) => CourseBloc(SetUserService())..add(LoadCourses())),
-        BlocProvider(create: (_) => ClassBloc(ClassRoomService())..add(LoadClasses())),
+        BlocProvider(create: (_) => ClassBloc(ClassRoomUserService())..add(LoadClasses())),
       ],
       child: const HomeScreen(),
     );

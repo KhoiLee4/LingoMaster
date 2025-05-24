@@ -91,51 +91,7 @@ class ClassListSection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             itemCount: state.classes!.length,
             itemBuilder: (context, index) {
-              final classItem = state.classes![index];
-
-              return FutureBuilder<BaseResponse<ClassRoomDto>>(
-                future: ClassRoomService().getClassRoomById(classItem.classId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                    );
-                  }
-                  else if (snapshot.hasError) {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text('Lỗi: ${snapshot.error}'),
-                      ),
-                    );
-                  }
-                  else if (snapshot.hasData && snapshot.data?.data != null) {
-                    return ClassItem(
-                      item: snapshot.data!.data!,
-                      hasIcon: true,
-                    );
-                  }
-                  else {
-                    // Fallback: tạo ClassRoomDto từ GetAllClassByUserIdRespone
-                    return ClassItem(
-                      item: ClassRoomDto(
-                        id: classItem.classId,
-                        name: classItem.className,
-                        classCode: classItem.classCode,
-                        description: classItem.description ?? '',
-                        isDelete: false,
-                        isPublic: true,
-                        createdAt: DateTime.now(),
-                        updatedAt: DateTime.now(),
-                      ),
-                      hasIcon: true,
-                    );
-                  }
-                },
-              );
+              return ClassItem(item: state.classes![index], hasIcon: true,);
             },
           );
         }
