@@ -1,8 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lingo_master/core/data/IncludeService/GoogleService/text_to_speech.dart';
 import 'package:lingo_master/core/design_systems/theme/app_colors.dart';
-
+import 'package:flutter_tts/flutter_tts.dart';
 import '../../../../../../core/data/NativeService/card_service.dart';
 import '../../../../../../core/navigation/routers.dart';
 import '../../bloc/course_bloc/course_bloc.dart';
@@ -57,7 +58,7 @@ class FlashCard extends StatefulWidget {
 }
 
 class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
-  int currentIndex = 2; // Starting at 39/95 (0-indexed)
+  int currentIndex = 0; // Starting at 39/95 (0-indexed)
   int numCardMemory = 0;
   int numCardForgot = 0;
 
@@ -104,6 +105,9 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
     super.dispose();
   }
 
+
+  //------ Update 
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -126,7 +130,6 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
           }
 
           int totalCards = state.cards?.length ?? 0;
-
           return Stack(
             children: [
               // Main content
@@ -145,7 +148,7 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
                                 color: AppColors.neutralGray600, size: 30),
                             onPressed: () {
                               // Handle close button press
-                              AppRouter.router.navigateTo(context, "/coursepage", replace: true);
+                              AppRouter.router.navigateTo(context, "/home");
                             },
                           ),
                           Text(
@@ -300,7 +303,7 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
                               // Kiểm tra xem đây có phải card cuối cùng không
                               if (currentIndex >= totalCards - 1) {
                                 // Đây là card cuối cùng, chuyển trang
-                                AppRouter.router.navigateTo(context, "/memoryCardSuccess", replace: true);
+                                AppRouter.router.navigateTo(context, "/memoryCardSuccess/${state.cards!.length ?? 0}/${numCardMemory}/${numCardForgot}", replace: true);
                               }
 
                               _animation = Tween<Offset>(
@@ -386,7 +389,27 @@ class _FlashCardState extends State<FlashCard>  with TickerProviderStateMixin  {
                                                     icon: const Icon(Icons.volume_up,
                                                         color: AppColors.neutralGray300),
                                                     onPressed: () {
-                                                      // Handle audio playback
+                                                      if(isShowingFront)
+                                                      {
+                                                        var  tts =  FlutterTts();
+                                                          tts.setLanguage("en-US");
+                                                          tts.setPitch(1.0);
+                                                          tts.setSpeechRate(0.5);
+                                                          tts.setVolume(1.0);
+                                                          tts.speak(state.cards![currentIndex % state.cards!.length].key.toString());
+
+                                                      }
+                                                      else
+                                                      {
+                                                         var  tts =  FlutterTts();
+                                                          tts.setLanguage("vi-VI");
+                                                          tts.setPitch(1.0);
+                                                          tts.setSpeechRate(0.5);
+                                                          tts.setVolume(1.0);
+                                                          tts.speak(state.cards![currentIndex % state.cards!.length].value.toString());
+
+                                                      }
+                                                     
                                                     },
                                                   ),
                                                   IconButton(

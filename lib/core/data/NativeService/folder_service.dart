@@ -84,7 +84,7 @@ class FolderService extends BaseService {
   }
 
   // POST: api/folder - Tạo folder mới
-  Future<BaseResponse<CreateFolderDto>> createFolderAsync(CreateFolderDto createDto) async {
+  Future<BaseResponse<FolderDto>> createFolderAsync(CreateFolderDto createDto) async {
     try {
       final response = await _client.post(
         Uri.parse('$url_api/api/folder'),
@@ -94,13 +94,13 @@ class FolderService extends BaseService {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        return BaseResponse<CreateFolderDto>.fromJson(
+        return BaseResponse<FolderDto>.fromJson(
           jsonResponse,
-              (data) => CreateFolderDto.fromJson(data as Map<String, dynamic>),
+              (data) => FolderDto.fromJson(data as Map<String, dynamic>),
         );
       } else {
         final jsonResponse = json.decode(response.body);
-        return BaseResponse<CreateFolderDto>(
+        return BaseResponse<FolderDto>(
           success: false,
           message: 'Failed to create folder. Status code: ${response.statusCode}',
           errors: jsonResponse['errors'] != null
@@ -109,7 +109,7 @@ class FolderService extends BaseService {
         );
       }
     } catch (e) {
-      return BaseResponse<CreateFolderDto>(
+      return BaseResponse<FolderDto>(
         success: false,
         message: 'Failed to create folder: ${e.toString()}',
         errors: [e.toString()],

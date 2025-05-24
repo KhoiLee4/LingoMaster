@@ -10,7 +10,9 @@ import 'component/matching_card/matchingCardSetting.dart';
 import 'component/matching_card/matching_card.dart';
 import 'component/memory_card/memory_card_page.dart';
 import 'component/memory_card/memory_card_success.dart';
+import 'component/study/study_success.dart';
 import 'component/test/test_setting.dart';
+import 'component/test/test_success.dart';
 
 class CourseRouter {
   static final Handler _maincourseHandler = Handler(
@@ -26,7 +28,16 @@ class CourseRouter {
     },
   );
   static final Handler _memoryCardSuccessHandler = Handler(
-    handlerFunc: (context, parameters) => MemoryCardSuccess(),
+    handlerFunc: (context, parameters){
+    final totalQuestions = parameters['totalQuestions']?.first;
+    final correctAnswers = parameters['correctAnswers']?.first;
+    final wrongAnswers = parameters['wrongAnswers']?.first;
+    return  MemoryCardSuccess(
+      totalQuestions:int.parse(totalQuestions!) ,
+      correctAnswers: int.parse(correctAnswers!),
+      wrongAnswers: int.parse(wrongAnswers!),
+    );
+    } 
   );
   static final Handler _studyHandler = Handler(
     handlerFunc: (context, parameters) {
@@ -36,6 +47,9 @@ class CourseRouter {
   );
   static final Handler _studySettingHandler = Handler(
     handlerFunc: (context, parameters) => StudySetting(),
+  );
+  static final Handler _studySuccessHandler = Handler(
+    handlerFunc: (context, parameters) => StudySuccess(),
   );
   static final Handler _TestSettingHandler = Handler(
     handlerFunc: (context, parameters) {
@@ -47,6 +61,16 @@ class CourseRouter {
     handlerFunc: (context, parameters) {
       final id = parameters['id']?.first;
       return TestProvider(id: id);
+    },
+  );
+  static final Handler _TestSuccessHandler = Handler(
+    handlerFunc: (context, parameters) { 
+      final numberRightQuestion = parameters['numberRightQuestion']?.first;
+      final numberWrongQuestion = parameters['numberWrongQuestion']?.first;
+      return TestSuccess(
+        numberRightQuestion: int.parse(numberRightQuestion!),
+        numberWrongQuestion: int.parse(numberWrongQuestion!),
+      );
     },
   );
   static final Handler _MatchingCardReadyHandler = Handler(
@@ -62,7 +86,10 @@ class CourseRouter {
     },
   );
   static final Handler _MatchingCardResultHandler = Handler(
-    handlerFunc: (context, parameters) => MatchingCardResult(),
+    handlerFunc: (context, parameters){ 
+      final time = parameters['time']?.first;
+      return  MatchingCardResult(time: time!);
+      },
   );
   static final Handler _MatchingCardSettingHandler = Handler(
     handlerFunc: (context, parameters) => MatchingCardSetting(),
@@ -81,7 +108,7 @@ class CourseRouter {
         transitionType: TransitionType.inFromRight,
       );
     router.define(
-      "/memoryCardSuccess",
+      "/memoryCardSuccess/:totalQuestions/:correctAnswers/:wrongAnswers",
       handler: _memoryCardSuccessHandler,
       transitionType: TransitionType.inFromRight,
     );
@@ -96,6 +123,11 @@ class CourseRouter {
       transitionType: TransitionType.inFromRight,
     );
     router.define(
+      "/studySuccess",
+      handler: _studySuccessHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
       "/testSetting/:id",
       handler: _TestSettingHandler,
       transitionType: TransitionType.inFromRight,
@@ -103,6 +135,11 @@ class CourseRouter {
     router.define(
       "/test/:id",
       handler: _TestHandler,
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      "/testSuccess/:id/:numberRightQuestion/:numberWrongQuestion",
+      handler: _TestSuccessHandler,
       transitionType: TransitionType.inFromRight,
     );
     router.define(
@@ -116,7 +153,7 @@ class CourseRouter {
       transitionType: TransitionType.inFromRight,
     );
     router.define(
-      "/matchingCardResult",
+      "/matchingCardResult/:time",
       handler: _MatchingCardResultHandler,
       transitionType: TransitionType.inFromRight,
     );

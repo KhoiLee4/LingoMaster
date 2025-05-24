@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lingo_master/core/domain/models/session.dart';
 
 import '../../../../../core/design_systems/theme/app_colors.dart';
+import '../../../../../core/navigation/routers.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -98,20 +100,16 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   _buildSettingsItem(
                     title: 'Tên người dùng',
-                    subtitle: 'KNgao1',
+                    subtitle: Session.user?.username,
                     onTap: () {},
                   ),
                   const Divider(height: 1),
                   _buildSettingsItem(
                     title: 'Email',
-                    subtitle: 'aotuong1390@gmail.com',
+                    subtitle: Session.user?.Email ,
                     onTap: () {},
                   ),
-                  const Divider(height: 1),
-                  _buildSettingsItem(
-                    title: 'Tạo mật khẩu',
-                    onTap: () {},
-                  ),
+                 
                 ],
               ),
             ),
@@ -287,7 +285,9 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
               child: _buildButtonItem(
                 title: 'Đăng xuất',
-                onTap: () {},
+                onTap: () {
+                  AppRouter.router.navigateTo(context, "/signin", replace: true);
+                },
                 textColor: Colors.black87,
               ),
             ),

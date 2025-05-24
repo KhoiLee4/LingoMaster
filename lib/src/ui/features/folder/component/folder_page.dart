@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/data/NativeService/folder_service.dart';
 import '../../../../../core/data/NativeService/folder_set_service.dart';
 import '../../../../../core/domain/dtos/folder_set/get_all_set_by_folder.dart';
+import '../../../../../core/navigation/routers.dart';
 import '../bloc/folder_bloc.dart';
 import '../bloc/folder_event.dart';
 import '../bloc/folder_state.dart';
@@ -673,54 +674,61 @@ class FolderDetailItem extends StatelessWidget {
           ),
         ],
       ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: const Icon(
-            Icons.library_books,
-            color: Colors.blue,
-            size: 24,
-          ),
-        ),
-        title: Text(
-          item.setName ?? 'Không có tên',
-          style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
-        ),
-        subtitle: Row(
-          children: [
-            Text(
-              '${item.totalCards ?? 0} thuật ngữ',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+      child: InkWell(
+        onTap: () {
+          AppRouter.router.navigateTo(context, "/coursepage/${item.setId}");
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(5),
             ),
-            const SizedBox(width: 8),
-            if (item.nameOwner != null) ...[
-              const Text(' • '),
+            child: const Icon(
+              Icons.library_books,
+              color: Colors.blue,
+              size: 24,
+            ),
+          ),
+          title: Text(
+            item.setName ?? 'Không có tên',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          subtitle: Row(
+            children: [
               Text(
-                item.nameOwner!,
+                '${item.totalCards ?? 0} thuật ngữ',
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: Colors.grey[600],
                 ),
               ),
+              const SizedBox(width: 8),
+              if (item.nameOwner != null) ...[
+                const Text(' • '),
+                Text(
+                  item.nameOwner!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
+          onTap: () {
+            AppRouter.router.navigateTo(context, "/coursepage/${item.setId}");
+          },
         ),
-        onTap: () {
-          // Handle tap action
-        },
       ),
     );
   }
