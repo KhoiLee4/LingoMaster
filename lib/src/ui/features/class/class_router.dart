@@ -5,7 +5,7 @@ class ClassRouter {
   static final Handler _mainclassHandler = Handler(
     handlerFunc: (context, parameters){
       final id = parameters['id']?.first; // Lấy tham số 'id' từ URL
-      return ClassScreen(id: id); // Truyền vào màn hình
+      return ClassProvider(id: id); // Truyền vào màn hình
     },
   );
 

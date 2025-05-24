@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../core/domain/dtos/classroom/classroom_dto.dart';
+import '../core/domain/dtos/classroom_user/get_all_class_by_user_id_respone.dart';
 import '../core/navigation/routers.dart';
 
 class ClassItem extends StatelessWidget {
-  final ClassRoomDto item;
+  final GetAllClassByUserIdRespone item;
   final bool hasIcon;
 
   const ClassItem({super.key, required this.item, required this.hasIcon});
@@ -27,7 +28,7 @@ class ClassItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/classpage/${item.id}");
+          AppRouter.router.navigateTo(context, "/classpage/${item.classId}");
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -43,7 +44,7 @@ class ClassItem extends StatelessWidget {
                 ),
               SizedBox(width: 16),
               Text(
-                item.name,
+                item.className,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -64,7 +65,7 @@ class ClassItem extends StatelessWidget {
                   const Icon(Icons.book_outlined, size: 16, color: Colors.grey),
                   const SizedBox(width: 4),
                   Text(
-                    'học phần',
+                    '${item.totalSets} học phần',
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                   ),
                   const SizedBox(width: 8),
@@ -73,7 +74,7 @@ class ClassItem extends StatelessWidget {
                   const SizedBox(width: 4),
                   if(!hasIcon)
                   Text(
-                    'thành viên',
+                    '${item.totalUsersJoin} thành viên',
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                   ),
                 ],
